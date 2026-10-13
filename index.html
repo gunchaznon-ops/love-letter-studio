@@ -754,30 +754,74 @@ function openPreview(){
 }
 function closePreview(){if(pvDestroy)pvDestroy();pvDestroy=null;$('#viewerRoot').hidden=true;document.body.style.overflow=''}
 
-/* ---------- สร้างลิงก์แชร์ ---------- */
+/* ---------- สร้างลิงก์แชร์ (ใช้ได้ 20 นาที / สร้างได้ทีละ 1 ลิงก์) ---------- */
+function ownerId(){
+  let o=localStorage.getItem('llOwner');
+  if(!o){o=Array.from(crypto.getRandomValues(new Uint8Array(12)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('llOwner',o)}
+  return o;
+}
+let linkTimer=null;
+const fmtT=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function endView(title,msg){
+  clearInterval(linkTimer);
+  const box=$('#sheetIn');
+  box.innerHTML=`<h3>${title}</h3><p class="hint">${msg}</p><div class="row"><button class="btn" id="newLnk">สร้างลิงก์ใหม่</button><button class="btn ghost" id="clLnk">ปิด</button></div>`;
+  $('#newLnk').onclick=createLink;$('#clLnk').onclick=()=>{$('#sheet').hidden=true};
+}
+function showLink(id,remaining,note){
+  const sheet=$('#sheet'),box=$('#sheetIn');sheet.hidden=false;
+  const endAt=Date.now()+remaining*1000;
+  let base=localStorage.getItem('llBase')||location.origin;
+  clearInterval(linkTimer);
+  const tick=()=>{
+    const left=Math.max(0,Math.ceil((endAt-Date.now())/1000));
+    const el=$('#tm');if(el)el.textContent=fmtT(left);
+    if(left<=0)endView('ลิงก์หมดอายุแล้ว ⌛','ลิงก์และข้อมูลจดหมายถูกลบออกจากเซิร์ฟเวอร์แล้ว สร้างลิงก์ใหม่ได้เลย');
+  };
+  const draw=()=>{
+    const url=base.replace(/\/$/,'')+'/l/'+id;
+    box.innerHTML=`<h3>ลิงก์พร้อมส่งแล้ว 💌</h3>
+      ${note?`<p class="hint" style="color:#c2185b">${note}</p>`:''}
+      <div class="link" id="lnk">${url}</div>
+      <div style="text-align:center;font-size:15px;color:#7d4a73">⏳ ลิงก์จะหมดอายุใน <b id="tm" style="color:#c2185b;font-size:22px;font-variant-numeric:tabular-nums">--:--</b></div>
+      <div class="row"><button class="btn" id="cpBtn">คัดลอกลิงก์</button><button class="btn ghost" id="shBtn">แชร์</button><a class="btn ghost" href="${url}" target="_blank" style="text-decoration:none">เปิดดู</a></div>
+      <div class="row"><button class="btn ghost" id="delBtn" style="color:#c62828;border-color:#f3b4b4">🗑️ ลบลิงก์</button><button class="btn ghost" id="clLnk">ปิด</button></div>
+      <label class="f"><span>ฐานลิงก์ (ใช้เมื่อมี tunnel/โดเมนอื่น)</span><input type="text" id="baseIn" value="${base}"></label>
+      <p class="hint">ลิงก์ใช้ได้ 20 นาทีแล้วจะถูกลบอัตโนมัติ และสร้างได้ทีละ 1 ลิงก์ ถ้าจะสร้างใหม่ต้องรอหมดเวลาหรือกดลบก่อน</p>`;
+    $('#baseIn').onchange=e=>{base=e.target.value.trim()||location.origin;localStorage.setItem('llBase',base);draw()};
+    $('#cpBtn').onclick=async()=>{try{await navigator.clipboard.writeText(url);$('#cpBtn').textContent='คัดลอกแล้ว ✓'}catch(_){prompt('คัดลอกลิงก์นี้',url)}};
+    $('#shBtn').onclick=()=>{navigator.share?navigator.share({title:'มีจดหมายถึงเธอ 💌',url}).catch(()=>{}):prompt('คัดลอกลิงก์นี้',url)};
+    $('#clLnk').onclick=()=>{sheet.hidden=true};
+    $('#delBtn').onclick=async()=>{
+      if(!confirm('ลบลิงก์นี้เลยไหม? คนที่มีลิงก์จะเปิดไม่ได้อีก'))return;
+      try{
+        const r=await fetch('/api/delete',{method:'POST',headers:{'Content-Type':'application/json','X-Owner':ownerId()},body:JSON.stringify({id})});
+        if(!r.ok&&r.status!==404)throw 0;
+        endView('ลบลิงก์แล้ว 🗑️','ลิงก์นี้เปิดไม่ได้อีกแล้ว คุณสร้างลิงก์ใหม่ได้ทันที');
+      }catch(_){alert('ลบไม่สำเร็จ ลองอีกครั้ง')}
+    };
+    tick();
+  };
+  draw();
+  linkTimer=setInterval(tick,1000);
+}
 async function createLink(){
   const sheet=$('#sheet'),box=$('#sheetIn');sheet.hidden=false;
-  const mb=(JSON.stringify(S).length/1048576).toFixed(1);
-  box.innerHTML=`<h3>กำลังสร้างลิงก์…</h3><p class="hint">ขนาดข้อมูล ~${mb} MB</p>`;
+  clearInterval(linkTimer);
+  box.innerHTML=`<h3>กำลังตรวจสอบ…</h3>`;
+  const H={'X-Owner':ownerId()};
   try{
-    const r=await fetch('/api/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(S)});
-    if(!r.ok)throw new Error((await r.json().catch(()=>({}))).error||('HTTP '+r.status));
-    const {id}=await r.json();
-    let base=localStorage.getItem('llBase')||location.origin;
-    const draw=()=>{
-      const url=base.replace(/\/$/,'')+'/l/'+id;
-      box.innerHTML=`<h3>ลิงก์พร้อมส่งแล้ว 💌</h3>
-        <div class="link" id="lnk">${url}</div>
-        <label class="f"><span>ฐานลิงก์ (ถ้าใช้ cloudflared ให้วาง https://xxxx.trycloudflare.com)</span><input type="text" id="baseIn" value="${base}"></label>
-        <div class="row"><button class="btn" id="cpBtn">คัดลอกลิงก์</button><button class="btn ghost" id="shBtn">แชร์</button><a class="btn ghost" href="${url}" target="_blank" style="text-decoration:none">เปิดดู</a></div>
-        <p class="hint">ลิงก์ใช้ได้ตราบที่ server.py (และ tunnel) ยังเปิดอยู่ใน Termux ข้อมูลจดหมายเก็บไว้ในโฟลเดอร์ data</p>`;
-      $('#baseIn').onchange=e=>{base=e.target.value.trim()||location.origin;localStorage.setItem('llBase',base);draw()};
-      $('#cpBtn').onclick=async()=>{try{await navigator.clipboard.writeText(url);$('#cpBtn').textContent='คัดลอกแล้ว ✓'}catch(_){prompt('คัดลอกลิงก์นี้',url)}};
-      $('#shBtn').onclick=()=>{navigator.share?navigator.share({title:'มีจดหมายถึงเธอ 💌',url}).catch(()=>{}):prompt('คัดลอกลิงก์นี้',url)};
-    };
-    draw();
+    const st=await (await fetch('/api/status',{headers:H})).json();
+    if(st.active)return showLink(st.id,st.remaining,'⚠️ มีลิงก์ที่ยังใช้งานอยู่ ต้องรอหมดเวลาหรือกดลบก่อนจึงจะสร้างใหม่ได้');
+    const mb=(JSON.stringify(S).length/1048576).toFixed(1);
+    box.innerHTML=`<h3>กำลังสร้างลิงก์…</h3><p class="hint">ขนาดข้อมูล ~${mb} MB</p>`;
+    const r=await fetch('/api/save',{method:'POST',headers:{...H,'Content-Type':'application/json'},body:JSON.stringify(S)});
+    const j=await r.json().catch(()=>({}));
+    if(r.status===409&&j.id)return showLink(j.id,j.remaining,'⚠️ มีลิงก์ที่ยังใช้งานอยู่ ต้องรอหมดเวลาหรือกดลบก่อนจึงจะสร้างใหม่ได้');
+    if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
+    showLink(j.id,j.remaining);
   }catch(err){
-    box.innerHTML=`<h3>สร้างลิงก์ไม่สำเร็จ</h3><p class="hint">${String(err.message||err)}<br>ตรวจสอบว่ารัน python server.py อยู่ และเปิดเว็บผ่านที่อยู่ของ server (ไม่ใช่เปิดไฟล์ index.html ตรงๆ)</p><div class="row"><button class="btn ghost" onclick="$('#sheet').hidden=true">ปิด</button></div>`;
+    box.innerHTML=`<h3>สร้างลิงก์ไม่สำเร็จ</h3><p class="hint">${String(err.message||err)}<br>ตรวจสอบว่า server.py ยังทำงานอยู่ และเปิดเว็บผ่านที่อยู่ของ server (ไม่ใช่เปิดไฟล์ index.html ตรงๆ)</p><div class="row"><button class="btn ghost" onclick="$('#sheet').hidden=true">ปิด</button></div>`;
   }
 }
 
@@ -790,7 +834,7 @@ async function createLink(){
     document.title='💌 มีจดหมายถึงเธอ';
     $('#app').hidden=true;const r=$('#viewerRoot');r.hidden=false;
     fetch('/api/letter/'+m[1]).then(x=>{if(!x.ok)throw 0;return x.json()}).then(cfg=>mountViewer(r,cfg))
-      .catch(()=>{r.style.background='#fdeef3';r.innerHTML='<div style="display:grid;place-items:center;height:100%;text-align:center;font-family:Kanit,sans-serif;color:#7a2848;padding:24px"><div><div style="font-size:60px">💔</div><p>ไม่พบจดหมายฉบับนี้<br>ลิงก์อาจหมดอายุหรือพิมพ์ผิด</p></div></div>'});
+      .catch(()=>{r.style.background='#fdeef3';r.innerHTML='<div style="display:grid;place-items:center;height:100%;text-align:center;font-family:Kanit,sans-serif;color:#7a2848;padding:24px"><div><div style="font-size:60px">💔</div><p>ไม่พบจดหมายฉบับนี้<br>ลิงก์อาจหมดอายุ (ใช้ได้ 20 นาที) หรือถูกลบแล้ว</p></div></div>'});
   }else{loadDraft();buildUI()}
 })();
 </script>
