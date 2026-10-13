@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>💌 Love Letter Studio</title>
-<link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;400;600&family=Mali:wght@400;600&family=Pridi:wght@300;400&family=Sriracha&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;400;600&family=Mali:wght@400;600&family=Pridi:wght@300;400&family=Sriracha&family=Prompt:wght@400;600&family=Sarabun:wght@400;600&family=Mitr:wght@400;600&family=Pattaya&family=Chonburi&family=Charmonman&family=Srisakdi&family=Maitree:wght@400;600&family=Kodchasan:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
@@ -139,6 +139,10 @@ a.vb{text-decoration:none;display:inline-block}
 @keyframes shk{10%,50%,90%{transform:translate(-8px,2px)}30%,70%{transform:translate(8px,-2px)}}
 .flash{position:absolute;inset:0;background:#fff;z-index:60;pointer-events:none;animation:fl .7s forwards}
 @keyframes fl{from{opacity:.9}to{opacity:0}}
+.sub{border:1.5px solid #f6dbe8;border-radius:16px;padding:12px;display:grid;gap:10px;background:#fffafd}.subh{font-weight:600;color:#c2185b}
+.bpv{display:flex;justify-content:center;padding:8px;background:linear-gradient(160deg,#ffd9e8,#ff9ec4);border-radius:12px}
+.mini{padding:4px 10px;font-size:12px}.f.col{flex-wrap:wrap}.isauto>label span::after{content:' · ตามธีม';color:#b99;font-size:12px}.isauto .mini{display:none}
+.jump{position:sticky;top:0;z-index:30;display:flex;gap:8px;overflow-x:auto;padding:8px 2px;background:rgba(253,238,243,.94);backdrop-filter:blur(8px);scrollbar-width:none}.jump .chip{flex:none;padding:6px 12px;white-space:nowrap}.card{scroll-margin-top:58px}
 </style>
 </head>
 <body>
@@ -159,6 +163,8 @@ const THEMES={
   sunset:  {bg1:'#ffe0b3',bg2:'#ff8fa3',env:'#ff8f6b',flap:'#ff7050',paper:'#fffaf3',text:'#7a3320',accent:'#e83a5c',hint:'#7a3320'}
 };
 const THEME_LABELS={pink:'🌸 ชมพูหวาน',night:'🌙 ราตรี',kraft:'📜 คราฟต์',lavender:'💜 ลาเวนเดอร์',mint:'🍃 มินต์',sunset:'🌅 ซันเซ็ต',custom:'🎨 กำหนดเอง'};
+const FONT_OPTS=[["'Mali',cursive",'Mali ลายมือน่ารัก'],["'Itim',cursive",'Itim ลายมือกลม'],["'Sriracha',cursive",'Sriracha ลายมือปากกา'],["'Pridi',serif",'Pridi มีหัว'],["'Kanit',sans-serif",'Kanit ทันสมัย'],["'Prompt',sans-serif",'Prompt เรียบ'],["'Sarabun',sans-serif",'Sarabun อ่านง่าย'],["'Mitr',sans-serif",'Mitr หนานุ่ม'],["'Pattaya',cursive",'Pattaya หวาน'],["'Chonburi',serif",'Chonburi หัวข้อเด่น'],["'Charmonman',cursive",'Charmonman ไทยโบราณ'],["'Srisakdi',cursive",'Srisakdi ลายมือ'],["'Maitree',serif",'Maitree มีหัวนุ่ม'],["'Kodchasan',sans-serif",'Kodchasan น่ารัก']];
+const BS=()=>({bg:'',fg:'',bd:'',bw:0,shape:'',scale:100,shadow:true,glow:true});
 const COLOR_LABELS={bg1:'พื้นหลังบน',bg2:'พื้นหลังล่าง',env:'ซอง',flap:'ฝาซอง',paper:'กระดาษ',text:'ตัวอักษรในจดหมาย',accent:'สีปุ่ม/หัวข้อ',hint:'ตัวอักษรบนพื้นหลัง'};
 const DEFAULT={
   theme:'pink',colors:{...THEMES.pink},font:"'Mali',cursive",
@@ -169,9 +175,10 @@ const DEFAULT={
   fall:{type:'hearts',emoji:'🥰 💖 ✨',img:null,count:40,speed:4,size:26,sway:true,when:'always'},
   audio:{src:null,name:'',trigger:'open',delay:5,loop:true,vol:80},
   adv:{bgImg:null,bgDim:0,angle:160,titleSize:100,lineH:175,letter:0,bold:false,italic:false,shadow:false,textOn:false,textColor:'#3b1d3a',titleOn:false,titleColor:'#d6336c',paperR:20,paperOp:100,paperShadow:true,btnScale:100,btnRadOn:false,btnRad:14,yesOn:false,yesColor:'#e91e63',noOn:false,noColor:'#888888',pageTitle:'',favicon:'',pass:'',passHint:'ใส่รหัสลับเพื่อเปิดจดหมาย',unlockOn:false,unlockAt:'',lockMsg:'ยังไม่ถึงเวลาเปิดนะ',css:''},
+  ui:{f:{title:'',body:'',sign:'',btn:''},tc:{title:'',body:'',sign:''},sign:{size:100,align:'right'},sp:{emoji:'💌',esize:64,card:'',cardT:'',r:26,ov:''},seal:36,hint:{c:'',s:17},pb:{w:6,c:''},rs:{t:'',p:'',big:96,lb:'',lt:'',ov:''},toast:{bg:'',fg:''},x:'',b:{start:BS(),yes:BS(),no:BS(),back:BS(),re:BS(),link:BS()}},
   btn:{mode:'two',yes:'คืนดีกันนะ 🥺',no:'ไม่คืนดี 😤',noMode:'run',cycle:'ไม่ได้นะ 😝,คิดดีๆก่อนสิ,ขอร้องล่ะ 🥹,ใจร้ายอ่ะ,กดอีกปุ่มสิ!',yesResult:'รักที่สุดเลย 💖',yesSub:'ขอบคุณที่ให้อภัยนะ',sound:'pop',noSound:'boing',shape:'pill',
   sad:{big:'😢',title:'เสียใจนะ...',sub:'แต่เรายังรอเธออยู่เสมอ',back:'ขอโทษ ย้อนกลับ'},
-  after:{screen:'full',big:'💖',letter:'',showPhoto:false,reread:true,autoClose:0,effects:['burst','fireworks'],count:70,times:3,burstEmoji:'💖 💗 💕 ✨ 🎉 🥰 🌸',sound:'tada',audio:'none',ya:{src:null,name:''},bgOn:false,bg:'#ffd1e3',linkMode:'none',link:'',linkLabel:'เปิดดูเลย',linkDelay:4}}
+  after:{screen:'full',big:'💖',letter:'',showPhoto:false,reread:true,reLabel:'อ่านอีกครั้ง',autoClose:0,effects:['burst','fireworks'],count:70,times:3,burstEmoji:'💖 💗 💕 ✨ 🎉 🥰 🌸',sound:'tada',audio:'none',ya:{src:null,name:''},bgOn:false,bg:'#ffd1e3',linkMode:'none',link:'',linkLabel:'เปิดดูเลย',linkDelay:4}}
 };
 const clone=o=>JSON.parse(JSON.stringify(o));
 function merge(a,b){for(const k in b){if(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k])&&a[k]&&typeof a[k]==='object'&&!Array.isArray(a[k]))merge(a[k],b[k]);else a[k]=b[k]}return a}
@@ -233,6 +240,14 @@ function mountViewer(root,cfg,opt={}){
     R.push(`button.vb,a.vb{font-size:${bs}em;padding:${12*bs}px ${22*bs}px;${AV.btnRadOn?'border-radius:'+n(AV.btnRad,14)+'px;':''}}`);
     if(AV.yesOn&&hexOk(AV.yesColor))R.push(`button.vb.yes{background:${AV.yesColor}}`);
     if(AV.noOn&&hexOk(AV.noColor))R.push(`button.vb.no{background:${AV.noColor}}`);
+    const U=c.ui,fam=v=>v?`font-family:${String(v).replace(/[;{}<>]/g,'')};`:'',cl=(p,v)=>hexOk(v)?p+':'+v+';':'';
+    R.push(`.paper h2{${fam(U.f.title)}${cl('color',U.tc.title)}}.paper .body{${fam(U.f.body)}${cl('color',U.tc.body)}}.paper .sign{${fam(U.f.sign)}${cl('color',U.tc.sign)}text-align:${['left','center','right'].includes(U.sign.align)?U.sign.align:'right'}}button.vb,a.vb{${fam(U.f.btn)}}`);
+    R.push(`.splash .card{${cl('background',U.sp.card)}${cl('color',U.sp.cardT)}border-radius:${n(U.sp.r,26)}px}.splash .em{font-size:${n(U.sp.esize,64)}px}${hexOk(U.sp.ov)?`.splash{background:color-mix(in srgb,${U.sp.ov},transparent 25%)}`:''}.e-seal{font-size:${n(U.seal,36)}px}.e-hint{font-size:${n(U.hint.s,17)}px;${cl('color',U.hint.c)}}`);
+    R.push(`.paper{box-shadow:${AV.paperShadow?'0 24px 60px rgba(0,0,0,.35),':''}inset 0 0 0 ${n(U.pb.w,6)}px ${hexOk(U.pb.c)?U.pb.c:'color-mix(in srgb,var(--accent),transparent 86%)'}}`);
+    R.push(`.result h1{${cl('color',U.rs.t)}}.result p{${cl('color',U.rs.p)}}.result .big{font-size:${n(U.rs.big,96)}px}.rletter{${cl('background',U.rs.lb)}${cl('color',U.rs.lt)}}${hexOk(U.rs.ov)?`.result{background:color-mix(in srgb,${U.rs.ov},transparent 12%)}`:''}.toast{${cl('background',U.toast.bg)}${cl('color',U.toast.fg)}}.paper .x{${hexOk(U.x)?'color:'+U.x+';opacity:1':''}}`);
+    const BM={start:'.go',yes:'button.vb.yes',no:'button.vb.no',back:'.sb',re:'.re',link:'a.vb.rlink'},RAD={pill:'999px',round:'14px',sq:'3px'};
+    for(const k in BM){const b=U.b[k];if(!b)continue;const s=bs*n(b.scale,100)/100;
+      R.push(`${BM[k]}{font-size:${s}em;padding:${12*s}px ${22*s}px;${cl('background',b.bg)}${cl('color',b.fg)}${n(b.bw,0)>0?`border:${n(b.bw,0)}px solid ${hexOk(b.bd)?b.bd:'currentColor'};`:''}${RAD[b.shape]?'border-radius:'+RAD[b.shape]+';':''}${b.shadow===false?'box-shadow:none;animation:none;':''}${k==='yes'&&b.glow===false?'animation:none;':''}}`)}
     const css=String(AV.css||'').replace(/<\/?style/gi,'').replace(/@import[^;]*;?/gi,'').replace(/url\(\s*['"]?\s*(https?:)?\/\//gi,'url(blocked:');
     const st=document.createElement('style');st.textContent='.vroot{'+R.join('')+css+'}';root.appendChild(st);
     if(!opt.onClose){
@@ -257,9 +272,9 @@ function mountViewer(root,cfg,opt={}){
   q('.e-seal').textContent=c.env.seal||'';
   q('.e-hint').textContent=c.env.hint||'';
   q('.splash h2').textContent=c.splash.text;
-  q('.go').textContent=c.splash.btn||'เริ่ม';
+  q('.go').textContent=c.splash.btn||'เริ่ม';q('.splash .em').textContent=c.ui.sp.emoji||'';
   const AF=c.btn.after,SD=c.btn.sad;
-  q('.re').textContent='อ่านอีกครั้ง';q('.re').hidden=!AF.reread;
+  q('.re').textContent=AF.reLabel||'อ่านอีกครั้ง';q('.re').hidden=!AF.reread;
   q('.win .big').textContent=AF.big||'';
   q('.win h1').textContent=c.btn.yesResult;
   q('.win p').textContent=c.btn.yesSub;
@@ -278,7 +293,7 @@ function mountViewer(root,cfg,opt={}){
   const h2=q('.paper h2'),bodyEl=q('.paper .body'),signEl=q('.paper .sign');
   h2.textContent=c.text.title;h2.hidden=!c.text.title;
   bodyEl.style.fontSize=num(c.text.size,18)+'px';bodyEl.style.textAlign=c.text.align;
-  signEl.textContent=c.text.sign;signEl.hidden=!c.text.sign;signEl.style.fontSize=num(c.text.size,18)+'px';
+  signEl.textContent=c.text.sign;signEl.hidden=!c.text.sign;signEl.style.fontSize=num(c.text.size,18)*num(c.ui.sign.size,100)/100+'px';
   const holder=q(c.photo.pos==='bottom'?'.photos.bottom':'.photos.top');
   holder.style.setProperty('--ps',num(c.photo.size,150)+'px');
   holder.style.justifyContent={left:'flex-start',center:'center',right:'flex-end'}[c.photo.align]||'center';
@@ -492,37 +507,61 @@ const F_={
   sel:(l,k,opts)=>`<label class="f"><span>${l}</span><select data-k="${k}">${opts.map(([v,t])=>`<option value="${v}">${t}</option>`).join('')}</select></label>`,
   chk:(l,k)=>`<label class="f chk"><input type="checkbox" data-k="${k}"><span>${l}</span></label>`,
   col:(l,k)=>`<label class="f col"><input type="color" data-k="${k}"><span>${l}</span></label>`,
+  colA:(l,k,fb)=>`<div class="f col"><label class="col"><input type="color" data-k="${k}" data-fb="${fb}"><span>${l}</span></label><button type="button" class="chip mini" data-auto="${k}">อัตโนมัติ</button></div>`,
   iff:(cond,html)=>`<div class="ifw" data-if="${cond}">${html}</div>`
 };
 const sec=(title,body,open)=>`<details class="card" ${open?'open':''}><summary>${title}</summary><div class="body">${body}</div></details>`;
 
 function buildUI(){
-  const {txt,area,rng,sel,chk,col,iff}=F_;
+  const {txt,area,rng,sel,chk,col,iff,colA}=F_;
+  const rst=p=>`<div class="row"><button type="button" class="chip" data-reset="${p}">↺ คืนค่าเริ่มต้นหมวดนี้</button></div>`;
+  const FS=[['','ตามฟอนต์หลัก'],...FONT_OPTS];
+  const bst=(k,l,x='')=>`<div class="sub"><div class="subh">${l}</div><div class="bpv"><button type="button" class="vb pill" data-bpv="${k}">ตัวอย่าง</button></div><div class="colors">${colA('สีปุ่ม',`ui.b.${k}.bg`,k==='no'?'mix:colors.text:45':'colors.accent')}${colA('สีตัวอักษร',`ui.b.${k}.fg`,'#ffffff')}${colA('สีขอบ',`ui.b.${k}.bd`,'#ffffff')}</div>${rng('ความหนาขอบ',`ui.b.${k}.bw`,0,8,1,'px')}${rng('ขนาดปุ่ม',`ui.b.${k}.scale`,60,200,5,'%')}${sel('รูปทรง',`ui.b.${k}.shape`,[['','ตามค่ารวม'],['pill','มน'],['round','มุมมนน้อย'],['sq','เหลี่ยม']])}${chk('เงาใต้ปุ่ม',`ui.b.${k}.shadow`)}${x}</div>`;
   $('#app').innerHTML=`
   <div class="hero"><h1>Love Letter Studio</h1><p>ออกแบบซองจดหมายเซอร์ไพรส์ ใส่รูป ข้อความ เสียง และหัวใจที่ร่วงลงมา แล้วส่งเป็นลิงก์ให้คนพิเศษของคุณ</p></div>
+  <nav class="jump" id="jump"></nav>
   ${sec('🎨 ธีมและสี',`
     <div class="chips" id="themes">${Object.keys(THEME_LABELS).map(k=>`<button class="chip" data-theme="${k}">${THEME_LABELS[k]}</button>`).join('')}</div>
     <div class="colors">${Object.keys(COLOR_LABELS).map(k=>col(COLOR_LABELS[k],'colors.'+k)).join('')}</div>
-    ${sel('ฟอนต์',"font",[["'Mali',cursive",'Mali ลายมือน่ารัก'],["'Itim',cursive",'Itim ลายมือกลม'],["'Sriracha',cursive",'Sriracha ลายมือปากกา'],["'Pridi',serif",'Pridi มีหัว'],["'Kanit',sans-serif",'Kanit ทันสมัย']])}
+    <span class="hint">พื้นหลังหน้าจอ</span>
+    ${rng('ทิศไล่สีพื้นหลัง','adv.angle',0,360,5,'°')}
+    <div class="row"><label class="btn ghost sm file">🖼 รูปพื้นหลัง<input type="file" id="bgIn" accept="image/*"></label><button class="btn ghost sm" id="bgDel" hidden>🗑 ลบ</button></div>
+    <p class="hint" id="bgInfo"></p>
+    ${rng('ความมืดทับรูปพื้นหลัง','adv.bgDim',0,80,5,'%')}
+    ${rst('theme;colors;adv.angle;adv.bgDim')}
   `,true)}
-  ${sec('💌 ซองจดหมาย',`
-    ${rng('ขนาดซอง','env.scale',50,170,1,'%')}
-    ${rng('ตำแหน่งซอง แนวนอน','env.x',10,90,1,'%')}
-    ${rng('ตำแหน่งซอง แนวตั้ง','env.y',15,85,1,'%')}
-    ${txt('ตราประทับบนซอง (อีโมจิ)','env.seal')}
-    ${txt('ข้อความใต้ซอง','env.hint')}
-    ${txt('ข้อความหน้าเริ่มต้น','splash.text')}
-    ${txt('ข้อความปุ่มเริ่ม','splash.btn')}
-    <p class="hint">หน้าเริ่มต้นช่วยให้เสียงเล่นได้ เพราะเบราว์เซอร์ไม่อนุญาตให้เล่นเสียงก่อนผู้ใช้จะแตะหน้าจอ</p>
+  ${sec('🔤 ฟอนต์และตัวอักษร',`
+    ${sel('ฟอนต์หลัก','font',FONT_OPTS)}
+    ${sel('ฟอนต์หัวจดหมาย','ui.f.title',FS)}${sel('ฟอนต์เนื้อความ','ui.f.body',FS)}${sel('ฟอนต์ลงท้าย','ui.f.sign',FS)}${sel('ฟอนต์บนปุ่ม','ui.f.btn',FS)}
+    <span class="hint">ขนาดและระยะ</span>
+    ${rng('ขนาดเนื้อความ','text.size',13,30,1,'px')}${rng('ขนาดหัวจดหมาย','adv.titleSize',60,250,5,'%')}${rng('ขนาดลงท้าย','ui.sign.size',60,200,5,'%')}
+    ${rng('ระยะห่างบรรทัด','adv.lineH',110,260,5,'%')}${rng('ระยะห่างตัวอักษร','adv.letter',-1,8,.5,'px')}
+    ${sel('จัดเนื้อความ','text.align',[['center','กึ่งกลาง'],['left','ชิดซ้าย'],['right','ชิดขวา']])}${sel('จัดลงท้าย','ui.sign.align',[['right','ชิดขวา'],['center','กึ่งกลาง'],['left','ชิดซ้าย']])}
+    ${chk('ตัวหนา','adv.bold')}${chk('ตัวเอียง','adv.italic')}${chk('เงาตัวอักษร','adv.shadow')}
+    <span class="hint">สีตัวอักษร</span>
+    <div class="colors">${colA('หัวจดหมาย','ui.tc.title','colors.accent')}${colA('เนื้อความ','ui.tc.body','colors.text')}${colA('ลงท้าย','ui.tc.sign','colors.text')}</div>
+    ${rst('font;ui.f;ui.tc;ui.sign;text.size;adv.titleSize;adv.lineH;adv.letter;adv.bold;adv.italic;adv.shadow')}
   `)}
-  ${sec('✍️ ข้อความ',`
-    ${txt('หัวจดหมาย','text.title')}
-    ${area('เนื้อหา','text.body',7)}
-    ${txt('ลงท้าย','text.sign')}
-    ${rng('ขนาดตัวอักษร','text.size',13,30,1,'px')}
-    ${rng('ความกว้างการ์ดจดหมาย','text.width',260,560,10,'px')}
-    ${sel('การจัดข้อความ','text.align',[['center','กึ่งกลาง'],['left','ชิดซ้าย'],['right','ชิดขวา']])}
+  ${sec('🏁 หน้าเริ่มต้น',`
+    ${txt('ข้อความ','splash.text')}${txt('ข้อความปุ่มเริ่ม','splash.btn')}${txt('อีโมจิตัวใหญ่','ui.sp.emoji')}
+    ${rng('ขนาดอีโมจิ','ui.sp.esize',30,140,2,'px')}${rng('ความมนของการ์ด','ui.sp.r',0,50,1,'px')}
+    <div class="colors">${colA('สีการ์ด','ui.sp.card','colors.paper')}${colA('สีข้อความ','ui.sp.cardT','colors.text')}${colA('สีฉากหลังเบลอ','ui.sp.ov','colors.bg2')}</div>
+    <p class="hint">สีปุ่มเริ่มปรับได้ที่หมวด 🎨 สไตล์ปุ่ม</p>
+    ${rst('splash;ui.sp')}
+  `)}
+  ${sec('💌 ซองจดหมาย',`
+    ${rng('ขนาดซอง','env.scale',50,170,1,'%')}${rng('ตำแหน่ง แนวนอน','env.x',10,90,1,'%')}${rng('ตำแหน่ง แนวตั้ง','env.y',15,85,1,'%')}
+    <div class="colors">${col('ซอง','colors.env')}${col('ฝาซอง','colors.flap')}</div>
+    ${txt('ตราประทับ (อีโมจิ)','env.seal')}${rng('ขนาดตราประทับ','ui.seal',16,80,1,'px')}
+    ${txt('ข้อความใต้ซอง','env.hint')}${rng('ขนาดข้อความใต้ซอง','ui.hint.s',10,32,1,'px')}${colA('สีข้อความใต้ซอง','ui.hint.c','colors.hint')}
+    ${rst('env;ui.seal;ui.hint')}
+  `)}
+  ${sec('✍️ การ์ดจดหมาย',`
+    ${txt('หัวจดหมาย','text.title')}${area('เนื้อหา','text.body',7)}${txt('ลงท้าย','text.sign')}
     ${chk('พิมพ์ข้อความทีละตัวอักษร (แตะการ์ดเพื่อข้าม)','text.typewriter')}
+    ${rng('ความกว้างการ์ด','text.width',260,560,10,'px')}${rng('ความมนของมุม','adv.paperR',0,50,1,'px')}${rng('ความทึบของการ์ด','adv.paperOp',30,100,5,'%')}
+    ${rng('ความหนาขอบใน','ui.pb.w',0,20,1,'px')}${colA('สีขอบใน','ui.pb.c','colors.accent')}${chk('เงาใต้การ์ด','adv.paperShadow')}${colA('สีปุ่มปิด ✕','ui.x','colors.text')}
+    ${rst('text.width;adv.paperR;adv.paperOp;adv.paperShadow;ui.pb;ui.x')}
   `)}
   ${sec('🖼️ รูปภาพ',`
     <div class="row"><label class="btn ghost sm file">＋ เลือกรูป (เลือกได้หลายรูป)<input type="file" id="photoIn" accept="image/*" multiple></label></div>
@@ -567,9 +606,21 @@ function buildUI(){
       ${area('ข้อความกวนๆ ตอนกดปุ่มปฏิเสธ (คั่นด้วย , หรือขึ้นบรรทัดใหม่)','btn.cycle',3)}
       ${iff('btn.noMode=sad',`${txt('อีโมจิหน้าเสียใจ','btn.sad.big')}${txt('หัวข้อ','btn.sad.title')}${txt('ข้อความรอง','btn.sad.sub')}${txt('ข้อความปุ่มย้อนกลับ','btn.sad.back')}`)}`)}
     ${sel('รูปทรงปุ่ม','btn.shape',[['pill','มน'],['round','มุมมนน้อย'],['sq','เหลี่ยม']])}
+    ${rng('ขนาดปุ่มรวม','adv.btnScale',70,170,5,'%')}
     ${sel('เสียงกดปุ่ม / เปิดซอง','btn.sound',SOUND_OPTS)}
     <div class="row"><button class="btn ghost sm" data-try="btn.sound">▶ ลองฟัง</button></div>
     ${iff('btn.mode=two',`${sel('เสียงตอนกดปุ่มปฏิเสธ','btn.noSound',SOUND_OPTS)}<div class="row"><button class="btn ghost sm" data-try="btn.noSound">▶ ลองฟัง</button></div>`)}
+  `)}
+  ${sec('🎨 สไตล์ปุ่มแต่ละปุ่ม',`
+    <p class="hint">ตั้งสี ขอบ ขนาด และรูปทรงแยกทีละปุ่ม ช่องที่เป็น "ตามธีม" คือใช้สีอัตโนมัติ กด "อัตโนมัติ" เพื่อย้อนกลับ</p>
+    ${bst('start','ปุ่มเริ่ม (หน้าแรก)')}
+    ${iff('btn.mode!=none',bst('yes','ปุ่มตอบรับ',chk('แสงเรืองรอบปุ่ม','ui.b.yes.glow')))}
+    ${iff('btn.mode=two',bst('no','ปุ่มปฏิเสธ'))}
+    ${iff('btn.mode=two',iff('btn.noMode=sad',bst('back','ปุ่มย้อนกลับ (หน้าเสียใจ)')))}
+    ${iff('btn.after.reread=true',bst('re','ปุ่มอ่านอีกครั้ง'))}
+    ${iff('btn.after.linkMode=button',bst('link','ปุ่มเปิดลิงก์'))}
+    <div class="sub"><div class="subh">ข้อความเด้ง</div><div class="colors">${colA('สีพื้น','ui.toast.bg','#1e0a1e')}${colA('สีตัวอักษร','ui.toast.fg','#ffffff')}</div></div>
+    ${rst('ui.b;ui.toast')}
   `)}
   ${sec('🎉 หลังกดปุ่มตอบรับ',`
     ${iff('btn.mode=none','<p class="hint">ตอนนี้เลือก "ไม่มีปุ่ม" ไว้ จึงไม่มีอะไรให้กด ไปเปลี่ยนที่หมวดปุ่มก่อนนะ</p>')}
@@ -577,6 +628,10 @@ function buildUI(){
       ${sel('หลังกดแล้วขึ้นอะไร','btn.after.screen',[['full','🖼️ หน้าเต็มจอ (ข้อความ รูป จดหมายลับ)'],['toast','💬 ข้อความเด้งเล็กๆ'],['none','✨ ไม่มีหน้าใหม่ มีแค่เอฟเฟกต์']])}
       ${txt('ข้อความหัวข้อ','btn.yesResult')}
       ${txt('ข้อความรอง','btn.yesSub')}
+      ${txt('ข้อความปุ่มอ่านอีกครั้ง','btn.after.reLabel')}
+      <span class="hint">สีและขนาดหน้านี้</span>
+      <div class="colors">${colA('สีหัวข้อ','ui.rs.t','colors.accent')}${colA('สีข้อความรอง','ui.rs.p','colors.hint')}${colA('สีฉากหลัง','ui.rs.ov','colors.bg1')}${colA('สีกล่องจดหมายลับ','ui.rs.lb','colors.paper')}${colA('สีตัวอักษรกล่อง','ui.rs.lt','colors.text')}</div>
+      ${rng('ขนาดอีโมจิใหญ่','ui.rs.big',40,200,2,'px')}
       ${iff('btn.after.screen=full',`
         ${txt('อีโมจิตัวใหญ่กลางจอ','btn.after.big')}
         ${area('จดหมายฉบับลับ / ข้อความเพิ่มเติม (เว้นว่างได้)','btn.after.letter',4)}
@@ -604,52 +659,35 @@ function buildUI(){
       <p class="hint">กด 👀 ดูตัวอย่าง แล้วลองกดปุ่มตอบรับดูได้เลย (ตัวอย่างจะไม่พาไปลิงก์จริง)</p>
     `)}
   `)}
-  ${sec('🛠️ ปรับแต่งขั้นสูง',`
-    <span class="hint">พื้นหลัง</span>
-    <div class="row"><label class="btn ghost sm file">🖼 รูปพื้นหลัง<input type="file" id="bgIn" accept="image/*"></label><button class="btn ghost sm" id="bgDel" hidden>🗑 ลบ</button></div>
-    <p class="hint" id="bgInfo"></p>
-    ${rng('ความมืดทับรูปพื้นหลัง','adv.bgDim',0,80,5,'%')}
-    ${rng('ทิศไล่สีพื้นหลัง','adv.angle',0,360,5,'°')}
-    <span class="hint">ตัวอักษรในจดหมาย</span>
-    ${rng('ขนาดหัวจดหมาย','adv.titleSize',60,250,5,'%')}
-    ${rng('ระยะห่างบรรทัด','adv.lineH',110,260,5,'%')}
-    ${rng('ระยะห่างตัวอักษร','adv.letter',-1,8,.5,'px')}
-    ${chk('ตัวหนา','adv.bold')}${chk('ตัวเอียง','adv.italic')}${chk('เงาตัวอักษร','adv.shadow')}
-    ${chk('กำหนดสีเนื้อความเอง','adv.textOn')}${iff('adv.textOn=true',col('สีเนื้อความ','adv.textColor'))}
-    ${chk('กำหนดสีหัวจดหมายเอง','adv.titleOn')}${iff('adv.titleOn=true',col('สีหัวจดหมาย','adv.titleColor'))}
-    <span class="hint">การ์ดจดหมาย</span>
-    ${rng('ความมนของมุม','adv.paperR',0,50,1,'px')}
-    ${rng('ความโปร่งแสง (ความทึบ)','adv.paperOp',30,100,5,'%')}
-    ${chk('เงาใต้การ์ด','adv.paperShadow')}
-    <span class="hint">ปุ่ม</span>
-    ${rng('ขนาดปุ่ม','adv.btnScale',70,170,5,'%')}
-    ${chk('กำหนดความมนปุ่มเอง','adv.btnRadOn')}${iff('adv.btnRadOn=true',rng('ความมนปุ่ม','adv.btnRad',0,40,1,'px'))}
-    ${chk('กำหนดสีปุ่มตอบรับเอง','adv.yesOn')}${iff('adv.yesOn=true',col('สีปุ่มตอบรับ','adv.yesColor'))}
-    ${chk('กำหนดสีปุ่มปฏิเสธเอง','adv.noOn')}${iff('adv.noOn=true',col('สีปุ่มปฏิเสธ','adv.noColor'))}
-    <span class="hint">ชื่อแท็บและไอคอน (ตอนแฟนเปิดลิงก์)</span>
-    ${txt('ชื่อหน้าเว็บ','adv.pageTitle','เช่น 💌 ถึงเธอคนเดียว')}
-    ${txt('อีโมจิไอคอนแท็บ','adv.favicon','💖')}
+  ${sec('🔒 แท็บ ล็อก และ CSS',`
+    ${txt('ชื่อหน้าเว็บ (แท็บ)','adv.pageTitle','เช่น 💌 ถึงเธอคนเดียว')}${txt('อีโมจิไอคอนแท็บ','adv.favicon','💖')}
     <span class="hint">ล็อกจดหมาย (เป็นแค่ความสนุก ไม่ใช่ความปลอดภัยจริง)</span>
-    ${txt('รหัสลับ (เว้นว่าง = ไม่ล็อก)','adv.pass')}
-    ${txt('คำใบ้ตอนถามรหัส','adv.passHint')}
+    ${txt('รหัสลับ (เว้นว่าง = ไม่ล็อก)','adv.pass')}${txt('คำใบ้ตอนถามรหัส','adv.passHint')}
     ${chk('ตั้งเวลาเปิดอ่าน (ก่อนถึงเวลาจะเปิดไม่ได้)','adv.unlockOn')}
     ${iff('adv.unlockOn=true',`<label class="f"><span>เปิดได้ตั้งแต่</span><input type="datetime-local" data-k="adv.unlockAt"></label>${txt('ข้อความก่อนถึงเวลา','adv.lockMsg')}`)}
-    <span class="hint">CSS เขียนเอง (ปรับได้ทุกอย่าง เช่น .paper{border:3px dashed pink} .vb{letter-spacing:2px} ใช้รูปจากเน็ตไม่ได้)</span>
+    <span class="hint">CSS เขียนเอง เช่น .paper{border:3px dashed pink} (ใช้รูปจากเน็ตไม่ได้)</span>
     ${area('CSS เพิ่มเติม','adv.css',6)}
   `)}
   <p class="hint" style="text-align:center;margin-top:16px"><button class="chip" id="resetBtn">↺ ล้างค่าทั้งหมด</button></p>
   <div class="bar"><button class="btn ghost" id="pvBtn">👀 ดูตัวอย่าง</button><button class="btn" id="shareBtn">🔗 สร้างลิงก์แชร์</button></div>
   <div class="sheet" id="sheet" hidden><div class="in" id="sheetIn"></div></div>`;
+  $('#jump').innerHTML=[...document.querySelectorAll('#app .card')].map((d,i)=>{d.id='s'+i;return `<button class="chip" data-jump="s${i}">${d.querySelector('summary').textContent.trim()}</button>`}).join('');
   bindAll();renderPhotos();renderFall();renderAudio();renderYA();renderBG();markTheme();markEff();refreshVis();
 }
 
 function bindAll(){
   document.querySelectorAll('[data-k]').forEach(el=>{
     const v=get(S,el.dataset.k);
-    if(el.type==='checkbox')el.checked=!!v;else el.value=v==null?'':v;
+    if(el.type==='checkbox')el.checked=!!v;else if(el.dataset.fb){el.value=v||fbVal(el.dataset.fb);el.closest('.f').classList.toggle('isauto',!v)}else el.value=v==null?'':v;
     const out=el.closest('.f')&&el.closest('.f').querySelector('.val');if(out)out.textContent=el.value;
   });
+  applyBPV();
 }
+function mixHex(a,b,t){const g=x=>{x=x.replace('#','');if(x.length===3)x=[...x].map(y=>y+y).join('');return[0,2,4].map(i=>parseInt(x.substr(i,2),16))},A=g(a),B=g(b);return'#'+A.map((v,i)=>Math.round(v*(1-t/100)+B[i]*t/100).toString(16).padStart(2,'0')).join('')}
+function fbVal(f){if(f[0]==='#')return f;if(f.startsWith('mix:')){const[,p,t]=f.split(':');return mixHex(get(S,p)||'#000000','#ffffff',+t)}return get(S,f)||'#000000'}
+function applyBPV(){const ok=v=>/^#[0-9a-f]{3,8}$/i.test(v||''),C=S.colors;document.querySelectorAll('[data-bpv]').forEach(el=>{const k=el.dataset.bpv,b=S.ui.b[k];
+  const bg=ok(b.bg)?b.bg:k==='no'?`color-mix(in srgb,${C.text},#fff 45%)`:C.accent,R={pill:'999px',round:'14px',sq:'3px'}[b.shape||S.btn.shape]||'999px';
+  el.style.cssText=`background:${bg};color:${ok(b.fg)?b.fg:'#fff'};border-radius:${R};font-size:${b.scale/100}em;${b.bw>0?`border:${b.bw}px solid ${ok(b.bd)?b.bd:'currentColor'};`:''}box-shadow:${b.shadow===false?'none':'0 6px 14px rgba(0,0,0,.22)'}`})}
 function refreshVis(){
   document.querySelectorAll('[data-if]').forEach(el=>{
     const m=el.dataset.if.match(/^(.+?)(!?=)(.+)$/);if(!m)return;
@@ -662,9 +700,12 @@ function onField(e){
   const v=el.type==='checkbox'?el.checked:(el.type==='range'||el.type==='number')?+el.value:el.value;
   set(S,el.dataset.k,v);
   const out=el.closest('.f')&&el.closest('.f').querySelector('.val');if(out)out.textContent=v;
-  if(el.dataset.k.startsWith('colors.')){S.theme='custom';markTheme()}
+  if(el.dataset.k.startsWith('colors.')){S.theme='custom';markTheme();document.querySelectorAll('[data-fb]').forEach(o=>{if(!get(S,o.dataset.k))o.value=fbVal(o.dataset.fb)})}
+  if(el.type==='color'){document.querySelectorAll('[data-k="'+el.dataset.k+'"]').forEach(o=>{if(o!==el)o.value=v});if(el.dataset.fb)el.closest('.f').classList.remove('isauto')}
+  applyBPV();
   refreshVis();persist();
 }
+document.addEventListener('toggle',e=>{const d=e.target;if(d.matches&&d.matches('#app .card')&&d.open){document.querySelectorAll('#app .card[open]').forEach(x=>{if(x!==d)x.open=false});setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'start'}),60)}},true);
 document.addEventListener('input',onField);document.addEventListener('change',onField);
 
 /* ---------- รูป ---------- */
@@ -717,6 +758,9 @@ document.addEventListener('click',async e=>{
   if(t.dataset.theme){const k=t.dataset.theme;S.theme=k;if(THEMES[k])S.colors={...THEMES[k]};bindAll();markTheme();persist()}
   if(t.dataset.del!==undefined){S.photos.splice(+t.dataset.del,1);renderPhotos();persist()}
   if(t.dataset.delfall!==undefined){S.fall.img=null;renderFall();persist()}
+  if(t.dataset.auto){set(S,t.dataset.auto,'');bindAll();persist()}
+  if(t.dataset.reset&&confirm('คืนค่าเริ่มต้นของหมวดนี้?')){t.dataset.reset.split(';').forEach(p=>set(S,p,clone(get(DEFAULT,p))));bindAll();markTheme();refreshVis();persist()}
+  if(t.dataset.jump){const d=document.getElementById(t.dataset.jump);document.querySelectorAll('#app .card').forEach(x=>x.open=x===d);d.scrollIntoView({behavior:'smooth',block:'start'})}
   if(t.dataset.try){sfx(get(S,t.dataset.try))}
   if(t.id==='recBtn')toggleRec('recBtn',()=>S.audio,renderAudio);
   if(t.id==='yaRec')toggleRec('yaRec',()=>S.btn.after.ya,renderYA);
