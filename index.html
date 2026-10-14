@@ -69,7 +69,8 @@ audio{width:100%}
 .envelope{position:relative;width:var(--ew,300px);height:var(--eh,200px);filter:drop-shadow(0 16px 22px rgba(0,0,0,.28));animation:bob 3.2s ease-in-out infinite}
 .envwrap.started .envelope{animation:none}
 @keyframes bob{50%{transform:translateY(-8px) rotate(-.6deg)}}
-.e-back{position:absolute;inset:0;border-radius:6px;background:color-mix(in srgb,var(--env),#000 16%)}
+.e-back{position:absolute;inset:0;border-radius:6px;background:color-mix(in srgb,var(--env),#000 30%)}
+.e-vedge{position:absolute;inset:0;z-index:3;pointer-events:none;background:rgba(0,0,0,.28);clip-path:polygon(0 0,50% var(--fh,112px),100% 0,100% 5px,50% calc(var(--fh,112px) + 5px),0 5px)}
 .e-letter{position:absolute;left:6%;right:6%;top:6%;height:88%;background:var(--paper);border-radius:4px;z-index:2;padding:16px 14px;display:flex;flex-direction:column;gap:10px;transition:transform .7s cubic-bezier(.3,1.35,.5,1) .5s}
 .e-letter i{display:block;height:5px;border-radius:3px;background:color-mix(in srgb,var(--text),transparent 82%)}
 .e-letter i:nth-child(2){width:80%}.e-letter i:nth-child(3){width:90%}.e-letter i:nth-child(4){width:55%}
@@ -327,14 +328,14 @@ function mountViewer(root,cfg,opt={}){
     {/* ซองจดหมาย: ลวดลาย ขอบ ไปรษณีย์อากาศ */
       const EP=U.ep,EB=U.eb,EA=U.air,EV=U.ev;
       const ep=patBg(EP.type,col2(EP.c,mixHex(hex6(c.colors.env,'#ff7aa8'),'#ffffff',55)),EP.s,EP.op);
-      if(ep)R.push(`.e-pocket{${lay(pl(ep).concat({i:'linear-gradient(180deg,color-mix(in srgb,var(--env),#fff 10%),var(--env))',z:'auto'}))}}.e-flap,.e-strip{${lay(pl(ep))}}.e-back{${lay(pl(ep))}}`);
+      if(ep)R.push(`.e-pocket{${lay(pl(ep).concat({i:'linear-gradient(180deg,color-mix(in srgb,var(--env),#fff 10%),var(--env))',z:'auto'}))}}.e-flap,.e-strip{${lay(pl(ep))}}`);
       const ebw=Math.max(0,Math.min(12,n(EB.w,0))),ebr=Math.max(0,Math.min(40,n(EB.r,6))),eaw=Math.max(4,Math.min(30,n(EA.w,9)));
       R.push(`.e-back,.e-pocket,.e-frame{border-radius:${ebr}px}.e-frame{display:${ebw>0?'block':'none'};border:${ebw}px ${BS_(EB.st)} ${col2(EB.c,'color-mix(in srgb,var(--env),#000 35%)')}}.opened .e-frame{border-top-color:transparent}`);
       R.push(`.e-air{display:${EA.on?'block':'none'};inset:-${eaw}px;border-radius:${ebr+eaw}px;background:${stripes(eaw,col2(EA.c1,'#e53935'),col2(EA.c2,'#1e88e5'))}}`);
       R.push(`.e-back{${cl('background-color',EV.lin)}}${hexOk(EV.sealBg)?`.e-seal{background:${EV.sealBg};border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center}`:''}${EV.shadow===false?'.envelope{filter:none}':''}`);
       const ES=U.es,SZ={classic:[300,200,112,80],wide:[340,180,100,70],tall:[230,310,115,110],square:[260,260,130,100],tear:[300,200,30,80]}[ES.shape]||[300,200,112,80];
       R.push(`.envelope{--ew:${SZ[0]}px;--eh:${SZ[1]}px;--fh:${SZ[2]}px;--lift:${SZ[3]}px}`);
-      if(ES.shape==='tear')R.push('.e-flap{display:none}.e-strip{display:block}.e-pocket{clip-path:none}.e-seal{top:16px}');
+      if(ES.shape==='tear')R.push('.e-flap{display:none}.e-strip{display:block}.e-pocket{clip-path:none}.e-vedge{display:none}.e-seal{top:16px}');
       R.push(`.e-tie{display:${ES.tie?'block':'none'};--tc:${col2(ES.tc,'#e53935')}}`);
       const WX=U.wax;
       if(WX.on){
@@ -385,7 +386,7 @@ function mountViewer(root,cfg,opt={}){
   root.insertAdjacentHTML('beforeend',`
     <div class="bgp"></div><canvas class="fall"></canvas>
     <div class="envwrap" style="left:${num(c.env.x,50)}%;top:${num(c.env.y,50)}%">
-      <div class="envelope"><div class="e-air"></div><div class="e-back"></div><div class="e-letter"><i></i><i></i><i></i><i></i></div><div class="e-pocket"></div><div class="e-flap"></div><div class="e-strip"></div><div class="e-tie"><i></i><i></i><b></b></div><div class="e-seal"></div><div class="e-frame"></div></div>
+      <div class="envelope"><div class="e-air"></div><div class="e-back"></div><div class="e-letter"><i></i><i></i><i></i><i></i></div><div class="e-pocket"></div><div class="e-vedge"></div><div class="e-flap"></div><div class="e-strip"></div><div class="e-tie"><i></i><i></i><b></b></div><div class="e-seal"></div><div class="e-frame"></div></div>
       <div class="e-hint"></div>
     </div>
     <div class="reader"><div class="paper"><span class="pframe"></span><button class="x" aria-label="ปิด">✕</button><div class="photos top"></div><h2></h2><p class="body"></p><p class="sign"></p><div class="photos bottom"></div><div class="btns"></div></div></div>
@@ -700,7 +701,7 @@ function buildUI(){
   ${sec('💌 ซองจดหมาย',`
     ${grp('ขนาดและตำแหน่ง',`${rng('ขนาดซอง','env.scale',50,170,1,'%')}${rng('ตำแหน่ง แนวนอน','env.x',10,90,1,'%')}${rng('ตำแหน่ง แนวตั้ง','env.y',15,85,1,'%')}`)}
     ${grp('รูปทรงซอง',`${sel('รูปทรง','ui.es.shape',[['classic','📮 คลาสสิก'],['wide','✉️ ซองยาว'],['tall','📜 แนวตั้ง'],['square','⬜ จัตุรัส'],['tear','🧾 ฉีกเปิดด้านบน']])}${chk('ผูกโบว์/ริบบิ้นรอบซอง','ui.es.tie')}${iff('ui.es.tie=true',`<div class="colors">${colA('สีริบบิ้น','ui.es.tc','#e53935')}</div>${txt('อีโมจิโบว์','ui.es.tieE')}`)}`)}
-    ${grp('สีซอง',`<div class="colors">${col('ตัวซอง','colors.env')}${col('ฝาซอง','colors.flap')}${colA('ด้านในซอง','ui.ev.lin','dark:colors.env:16')}</div>`)}
+    ${grp('สีซอง',`<div class="colors">${col('ตัวซอง','colors.env')}${col('ฝาซอง','colors.flap')}${colA('ด้านในซอง','ui.ev.lin','dark:colors.env:30')}</div>`)}
     ${grp('ลวดลายบนซอง',`<p class="hint">เลือกลายแล้วปรับสี ขนาด และความเข้มได้ ลายจะอยู่ทั้งตัวซองและฝาซอง</p>${pat('ui.ep','mix:colors.env:55')}`)}
     ${grp('ขอบซอง',`${rng('ความหนาขอบ','ui.eb.w',0,12,1,'px')}${sel('ลายเส้นขอบ','ui.eb.st',BSTY)}<div class="colors">${colA('สีขอบ','ui.eb.c','dark:colors.env:35')}</div>${rng('ความมนมุมซอง','ui.eb.r',0,30,1,'px')}${air('ui.air')}`)}
     ${grp('ตราประทับ',`${txt('ตราประทับ (อีโมจิ)','env.seal')}${rng('ขนาดตราประทับ','ui.seal',16,80,1,'px')}<div class="colors">${colA('วงกลมใต้ตราประทับ','ui.ev.sealBg','#ffffff')}</div><p class="hint">ถ้าเป็น "อัตโนมัติ" จะไม่มีวงกลมใต้ตรา</p>`)}
