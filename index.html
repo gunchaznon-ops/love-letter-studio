@@ -181,6 +181,21 @@ a.vb{text-decoration:none;display:inline-block}
 .pvtools{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:101;display:flex;gap:6px;background:rgba(20,10,30,.78);padding:6px;border-radius:999px;backdrop-filter:blur(8px)}
 .pvtools .chip{padding:6px 12px;font-size:13px;white-space:nowrap}
 #pvBack{position:fixed;inset:0;background:rgba(20,12,30,.92);z-index:99}
+.late{margin:0 0 12px;text-align:center}.late p{margin:8px 0 0;white-space:pre-wrap;line-height:1.7;animation:popin .7s backwards}
+.pgi{text-align:center;font-size:13px;opacity:.65;margin:2px 0 8px}.pgi:empty{display:none}
+.insl{position:absolute;inset:0;z-index:7;display:grid;place-items:center;pointer-events:none}
+.insi{pointer-events:auto;cursor:pointer;max-width:78%;text-align:center;transform:rotate(var(--r,0deg));animation:pull .7s cubic-bezier(.2,1.2,.4,1) backwards;transition:transform .35s,opacity .35s;color:var(--text)}
+.insi.out{transform:translateY(-110vh) rotate(14deg);opacity:0}
+@keyframes pull{from{transform:translateY(160px) scale(.4) rotate(-10deg);opacity:0}}
+.insi img{display:block;width:min(240px,100%);aspect-ratio:1;object-fit:cover;margin:0 auto}
+.insi.polaroid{background:#fff;padding:12px 12px 14px;box-shadow:0 14px 34px rgba(0,0,0,.35)}.insi.polaroid .ic{font-family:'Sriracha','Mali',cursive;color:#444;margin-top:10px;font-size:18px}
+.insi.photo img{border:6px solid #fff;box-shadow:0 14px 34px rgba(0,0,0,.35)}.insi.photo .ic{margin-top:10px;font-weight:600}
+.insi.card{background:var(--paper);padding:22px 20px;border-radius:14px;min-width:200px;box-shadow:0 14px 34px rgba(0,0,0,.35),inset 0 0 0 4px color-mix(in srgb,var(--accent),transparent 80%)}.insi.card img{width:120px;border-radius:10px;margin-bottom:10px}.insi.card .ic{white-space:pre-wrap;line-height:1.6;font-size:18px}
+.insi .ic:empty{display:none}.insi small{display:block;margin-top:12px;font-size:12px;opacity:.8;color:var(--hint)}.insi.polaroid small{color:#777}.insi.card small{color:var(--text)}
+.mpl{position:absolute;left:10px;top:calc(54px + env(safe-area-inset-top));z-index:45;display:flex;gap:6px;align-items:flex-start;transition:transform .3s}
+.mpl iframe{border:0;border-radius:12px;width:min(300px,78vw);height:152px;background:#000}.mpl.sp iframe{height:80px}
+.mpl button{border:0;border-radius:50%;width:34px;height:34px;background:rgba(0,0,0,.55);color:#fff;font-size:16px;cursor:pointer}
+.mpl.min{transform:translateX(calc(-100% + 38px))}
 </style>
 </head>
 <body>
@@ -208,10 +223,10 @@ const DEFAULT={
   theme:'pink',colors:{...THEMES.pink},font:"'Mali',cursive",
   env:{scale:100,x:50,y:50,seal:'💗',hint:'แตะที่ซองเพื่อเปิด 💌'},
   splash:{text:'มีบางอย่างส่งถึงเธอ 💌',btn:'แตะเพื่อเริ่ม'},
-  text:{title:'ถึงที่รักของเรา',body:'ขอโทษนะ ที่ทำให้เสียใจ\nเรารู้ตัวแล้วว่าผิดไป\nคืนดีกันนะ ได้ไหม 🥺',sign:'จากคนที่รักเธอที่สุด 💕',size:18,align:'center',width:420,typewriter:true},
-  photos:[],photo:{shape:'polaroid',size:150,pos:'top',align:'center',tilt:true},
+  text:{title:'ถึงที่รักของเรา',body:'ขอโทษนะ ที่ทำให้เสียใจ\nเรารู้ตัวแล้วว่าผิดไป\nคืนดีกันนะ ได้ไหม 🥺',sign:'จากคนที่รักเธอที่สุด 💕',size:18,align:'center',width:420,typewriter:true,pages:[]},
+  photos:[],ins:[],late:[],photo:{shape:'polaroid',size:150,pos:'top',align:'center',tilt:true},
   fall:{type:'hearts',emoji:'🥰 💖 ✨',img:null,count:40,speed:4,size:26,sway:true,when:'always'},
-  audio:{src:null,name:'',trigger:'open',delay:5,loop:true,vol:80},
+  audio:{source:'file',link:'',src:null,name:'',trigger:'open',delay:5,loop:true,vol:80},
   adv:{bgImg:null,bgDim:0,angle:160,titleSize:100,lineH:175,letter:0,bold:false,italic:false,shadow:false,textOn:false,textColor:'#3b1d3a',titleOn:false,titleColor:'#d6336c',paperR:20,paperOp:100,paperShadow:true,btnScale:100,btnRadOn:false,btnRad:14,yesOn:false,yesColor:'#e91e63',noOn:false,noColor:'#888888',pageTitle:'',favicon:'',pass:'',passHint:'ใส่รหัสลับเพื่อเปิดจดหมาย',unlockOn:false,unlockAt:'',lockMsg:'ยังไม่ถึงเวลาเปิดนะ',css:''},
   ui:{f:{title:'',body:'',sign:'',btn:''},tc:{title:'',body:'',sign:''},sign:{size:100,align:'right'},sp:{emoji:'💌',esize:64,card:'',cardT:'',r:26,ov:'',bw:0,bs:'solid',bc:''},seal:36,hint:{c:'',s:17},pb:{w:6,c:''},rs:{t:'',p:'',big:96,lb:'',lt:'',ov:''},toast:{bg:'',fg:''},x:'',ep:{type:'none',c:'',s:18,op:45},eb:{w:0,st:'solid',c:'',r:6},air:{on:false,w:9,c1:'#e53935',c2:'#1e88e5'},ev:{lin:'',sealBg:'',shadow:true,bob:true},es:{shape:'classic',tie:false,tc:'',tieE:'🎀'},wax:{on:false,c:'',shape:'round'},gl:{on:false,target:'paper',mode:'pulse',c:'',speed:5},fx:{open:'none',emoji:'🌸 🌺 💮'},ba:{mode:'none',speed:5},pp:{type:'none',c:'',s:18,op:18},po:{w:0,st:'solid',c:''},pa:{on:false,w:12,c1:'#e53935',c2:'#1e88e5'},pf:{on:false,st:'dashed',w:2,c:'',gap:10},bp:{type:'none',c:'',s:26,op:25},pd:{w:0,st:'solid',c:''},b:{start:BS(),yes:BS(),no:BS(),back:BS(),re:BS(),link:BS()}},
   btn:{mode:'two',yes:'คืนดีกันนะ 🥺',no:'ไม่คืนดี 😤',noMode:'run',cycle:'ไม่ได้นะ 😝,คิดดีๆก่อนสิ,ขอร้องล่ะ 🥹,ใจร้ายอ่ะ,กดอีกปุ่มสิ!',yesResult:'รักที่สุดเลย 💖',yesSub:'ขอบคุณที่ให้อภัยนะ',sound:'pop',noSound:'boing',shape:'pill',
@@ -289,6 +304,10 @@ function patBg(t,col,sz,op){
   return null;
 }
 
+function parseMusic(u){u=String(u||'').trim();let m;
+  if(m=u.match(/spotify(?:\.com\/(?:intl-[a-z]+\/)?|:)(track|album|playlist|episode|show)[\/:]([A-Za-z0-9]{10,30})/))return{k:'sp',src:'https://open.spotify.com/embed/'+m[1]+'/'+m[2]+'?theme=0'};
+  if(m=u.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/))([\w-]{11})/)){const t=(u.match(/[?&](?:t|start)=(\d+)/)||[])[1];return{k:'yt',src:'https://www.youtube-nocookie.com/embed/'+m[1]+'?autoplay=1&loop=1&playlist='+m[1]+'&playsinline=1&rel=0'+(t?'&start='+t:'')}}
+  return null}
 function mountViewer(root,cfg,opt={}){
   const c=merge(clone(DEFAULT),clone(cfg));
   const cleanup=[],timers=[];
@@ -389,7 +408,7 @@ function mountViewer(root,cfg,opt={}){
       <div class="envelope"><div class="e-air"></div><div class="e-back"></div><div class="e-letter"><i></i><i></i><i></i><i></i></div><div class="e-pocket"></div><div class="e-vedge"></div><div class="e-flap"></div><div class="e-strip"></div><div class="e-tie"><i></i><i></i><b></b></div><div class="e-seal"></div><div class="e-frame"></div></div>
       <div class="e-hint"></div>
     </div>
-    <div class="reader"><div class="paper"><span class="pframe"></span><button class="x" aria-label="ปิด">✕</button><div class="photos top"></div><h2></h2><p class="body"></p><p class="sign"></p><div class="photos bottom"></div><div class="btns"></div></div></div>
+    <div class="reader"><div class="paper"><span class="pframe"></span><button class="x" aria-label="ปิด">✕</button><div class="photos top"></div><h2></h2><p class="body"></p><p class="sign"></p><div class="photos bottom"></div><div class="late"></div><div class="pgi"></div><div class="btns"></div></div></div>
     <div class="result win" hidden><div class="rin"><div class="big"></div><h1></h1><p></p><div class="photos rphotos"></div><div class="rletter"></div><a class="vb pill rlink" hidden target="_blank" rel="noopener noreferrer"></a><button class="vb pill re"></button></div></div>
     <div class="result sad" hidden><div class="rin"><div class="big"></div><h1></h1><p></p><button class="vb pill sb"></button></div></div>
     <canvas class="fx"></canvas>
@@ -435,6 +454,31 @@ function mountViewer(root,cfg,opt={}){
   (c.photos||[]).forEach(src=>{const f=document.createElement('figure');const im=new Image();im.src=src;f.appendChild(im);holder.appendChild(f)});
 
   function toast(m,ms=1500){if(!m)return;toastEl.textContent=m;toastEl.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>toastEl.classList.remove('show'),ms)}
+
+  /* ---------- หลายหน้า / ข้อความตั้งเวลา / ของในซอง ---------- */
+  const PG=[{t:c.text.title,b:c.text.body},...(c.text.pages||[]).filter(p=>p&&(p.b||p.t))];
+  const LATE=(c.late||[]).filter(m=>m&&m.text),INS=(c.ins||[]).filter(x=>x&&(x.img||x.cap));
+  const lateEl=q('.late'),pgi=q('.pgi'),seenP={};let pg=0,typing=false,built=false;
+  function showLate(){lateEl.innerHTML='';LATE.forEach(m=>{if(m.on&&m.st!=='bubble'){const p=document.createElement('p');p.textContent=m.text;lateEl.appendChild(p)}})}
+  function armLate(from){LATE.forEach(m=>{if((m.from||'read')!==from)return;to(()=>{m.on=true;sfx('chime');if(m.st==='bubble')toast(m.text,6000);else if(pg===PG.length-1&&reader.classList.contains('show'))showLate()},Math.max(0,num(m.delay,5))*1000)})}
+  function showPage(i){
+    pg=i;const P=PG[i],last=i===PG.length-1;
+    h2.textContent=P.t;h2.hidden=!P.t;signEl.hidden=!(last&&c.text.sign);
+    q('.photos.top').hidden=i>0;q('.photos.bottom').hidden=!last;btns.hidden=!last;lateEl.hidden=!last;paper.scrollTop=0;
+    pgi.textContent=PG.length>1?(i>0?'‹ ':'')+(i+1)+' / '+PG.length+(last?'':' ›  แตะเพื่อพลิกหน้า'):'';
+    const fin=()=>{if(last){if(!built){built=true;buildButtons()}showLate()}};
+    if(seenP[i]){bodyEl.textContent=P.b;bodyEl.hidden=!P.b;fin()}else{seenP[i]=1;typeBody(fin,P.b)}
+  }
+  function flip(i,d){if(typing||i<0||i>=PG.length)return;sfx('click');const T=a=>`perspective(900px) rotateY(${a}deg)`;paper.animate([{transform:'none',opacity:1},{transform:T(-70*d),opacity:0}],200).onfinish=()=>{showPage(i);paper.animate([{transform:T(70*d),opacity:0},{transform:'none',opacity:1}],220)}}
+  paper.addEventListener('click',e=>{if(e.target.closest('button,a'))return;const r=paper.getBoundingClientRect(),L=e.clientX-r.left<r.width*.3;flip(pg+(L?-1:1),L?-1:1)});
+  const insEl=document.createElement('div');insEl.className='insl';root.appendChild(insEl);
+  function runIns(k){
+    insEl.innerHTML='';if(k>=INS.length)return showReader();
+    const x=INS[k],d=document.createElement('div');d.className='insi '+(x.kind||'polaroid');d.style.setProperty('--r',(k%2?3:-3)+'deg');
+    d.innerHTML=(x.img?'<img alt="">':'')+'<div class="ic"></div><small></small>';if(x.img)d.firstChild.src=x.img;
+    d.querySelector('.ic').textContent=x.cap||'';d.querySelector('small').textContent=k+1<INS.length?'แตะเพื่อหยิบชิ้นถัดไป':'แตะเพื่ออ่านจดหมาย 💌';
+    insEl.appendChild(d);sfx('pop');d.onclick=()=>{d.classList.add('out');to(()=>runIns(k+1),350)};
+  }
 
   /* ---------- canvas: ของที่ร่วง + พลุหัวใจ ---------- */
   const fall=q('.fall'),fx=q('.fx'),fctx=fall.getContext('2d'),xctx=fx.getContext('2d');
@@ -510,12 +554,14 @@ function mountViewer(root,cfg,opt={}){
   if(fallOn){for(let i=0;i<num(F.count,40);i++)P.push(mkP(-20,H))}
 
   /* ---------- เสียงพื้นหลัง/เสียงที่อัด ---------- */
-  let au=null;const A=c.audio;
-  if(A.src){
+  const A=c.audio,ML=A.source==='link'?parseMusic(A.link):null;let au=null,mp=null;
+  const linkPlay=()=>{if(!ML||mp)return;mp=document.createElement('div');mp.className='mpl '+ML.k;mp.innerHTML='<iframe allow="autoplay; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe><button type="button">🎵</button>';mp.firstChild.src=ML.src;mp.lastChild.onclick=()=>mp.classList.toggle('min');root.appendChild(mp);if(ML.k==='sp')toast('แตะ ▶ ที่เครื่องเล่นเพื่อฟังเพลง 🎵',3500)};
+  const linkStop=()=>{if(mp){mp.remove();mp=null}};cleanup.push(linkStop);
+  if(A.src&&A.source!=='link'){
     au=new Audio(A.src);au.loop=!!A.loop;au.volume=num(A.vol,80)/100;au.preload='auto';
     cleanup.push(()=>{au.pause();au.removeAttribute('src');au.load()});
   }
-  const playAu=()=>{if(au){au.muted=false;au.play().catch(()=>{})}};
+  const playAu=()=>{if(ML)return linkPlay();if(au){au.muted=false;au.play().catch(()=>{})}};
   const unlockAu=()=>{if(!au)return;au.muted=true;au.play().then(()=>{au.pause();au.currentTime=0;au.muted=false}).catch(()=>{au.muted=false})};
 
   let yau=null;
@@ -530,30 +576,29 @@ function mountViewer(root,cfg,opt={}){
     return true;
   }
   q('.go').onclick=()=>{
-    if(started||!gate())return;started=true;ping('start');sfx(c.btn.sound);splash.classList.add('hide');
+    if(started||!gate())return;started=true;ping('start');armLate('start');sfx(c.btn.sound);splash.classList.add('hide');
     to(()=>splash.remove(),600);
     if(A.trigger==='start')playAu();
     else{unlockAu();if(A.trigger==='timer')to(playAu,Math.max(0,num(A.delay,5))*1000)}
   };
   function showReader(){
     reader.classList.add('show');envwrap.classList.add('gone');
-    if(!typed){typed=true;typeBody(buildButtons)}
+    if(!typed){typed=true;armLate('read');showPage(0)}
   }
   function openLetter(){
     if(!started)return;
     if(!opened){
-      opened=true;ping('open');openFx();envwrap.classList.add('started');envelope.classList.add('opened');sfx(c.btn.sound);
+      opened=true;ping('open');armLate('open');openFx();envwrap.classList.add('started');envelope.classList.add('opened');sfx(c.btn.sound);
       if(A.trigger==='open')playAu();
       if(F.type!=='none'&&F.when==='afterOpen'){fallOn=true}
-      to(showReader,1500);
+      to(()=>INS.length?runIns(0):showReader(),1500);
     }else showReader();
   }
   envwrap.addEventListener('click',openLetter);
   q('.paper .x').onclick=()=>{reader.classList.remove('show');envwrap.classList.remove('gone');result.hidden=true};
 
   /* ---------- พิมพ์ข้อความทีละตัว ---------- */
-  function typeBody(done){
-    const txt=c.text.body||'';
+  function typeBody(done,txt){typing=true;const d0=done;done=()=>{typing=false;d0()};txt=txt||'';
     if(!c.text.typewriter||!txt){bodyEl.textContent=txt;bodyEl.hidden=!txt;return done()}
     bodyEl.innerHTML='<span class="v"></span><span class="h"></span>';
     const v=bodyEl.firstChild,h=bodyEl.lastChild,ch=Array.from(txt);let i=0,skip=false;
@@ -621,9 +666,9 @@ function mountViewer(root,cfg,opt={}){
     if(X.bgOn&&/^#[0-9a-f]{3,8}$/i.test(X.bg||'')){root.style.setProperty('--bg1',X.bg);root.style.setProperty('--bg2','color-mix(in srgb,'+X.bg+',#000 22%)')}
     runEffects();
     to(()=>sfx(X.sound),150);
-    if(X.audio==='main'){if(au){au.currentTime=0;playAu()}}
-    else if(X.audio==='stop'){if(au)au.pause()}
-    else if(X.audio==='own'){if(au)au.pause();if(yau){yau.currentTime=0;yau.play().catch(()=>{})}}
+    if(X.audio==='main'){if(ML){linkStop();linkPlay()}else if(au){au.currentTime=0;playAu()}}
+    else if(X.audio==='stop'){linkStop();if(au)au.pause()}
+    else if(X.audio==='own'){linkStop();if(au)au.pause();if(yau){yau.currentTime=0;yau.play().catch(()=>{})}}
     const url=safeUrl(X.link);
     if(url&&X.linkMode==='button'){const a=q('.rlink');a.href=url;a.textContent=X.linkLabel||'เปิดดูเลย';a.hidden=false;if(X.screen!=='full')btns.appendChild(a)}
     else if(url&&X.linkMode==='redirect'){const d=Math.max(1,num(X.linkDelay,4))*1000;if(opt.onClose)to(()=>toast('(ตัวอย่าง) จะพาไปที่ '+url,3000),d);else to(()=>{location.href=url},d)}
@@ -672,7 +717,7 @@ function buildUI(){
 
   ${sec('🎁 เทมเพลตและแบบร่าง',`
     ${grp('เทมเพลตสำเร็จรูป',`<p class="hint">เลือกแล้วระบบจะตั้งธีม ซอง ลาย ขอบ เอฟเฟกต์ และข้อความให้ทั้งชุด จากนั้นแก้ต่อได้ทุกอย่าง</p><div class="tpls" id="tpls"></div>`)}
-    ${grp('แบบร่างของฉัน',`<label class="f"><span>ตั้งชื่อแล้วบันทึกไว้</span><input type="text" id="dName" placeholder="เช่น ง้อแฟนครั้งที่ 2"></label><div class="row"><button type="button" class="btn ghost sm" id="dSave">💾 บันทึกแบบร่างนี้</button><button type="button" class="btn ghost sm" id="dNew">＋ เริ่มแบบร่างใหม่</button></div><div id="draftList" class="dlist"></div><p class="hint">แบบร่างเก็บในเบราว์เซอร์เครื่องนี้ (รวมรูปและเสียง) ถ้าล้างข้อมูลเบราว์เซอร์จะหายนะ</p>`)}
+    ${grp('แบบร่างของฉัน',`<label class="f"><span>ตั้งชื่อแล้วบันทึกไว้</span><input type="text" id="dName" placeholder="เช่น ง้อแฟนครั้งที่ 2"></label><div class="row"><button type="button" class="btn ghost sm" id="dSave">💾 บันทึกแบบร่างนี้</button><button type="button" class="btn ghost sm" id="dNew">＋ เริ่มแบบร่างใหม่</button><button type="button" class="btn ghost sm" id="tplSave">⭐ เก็บเป็นเทมเพลตของฉัน</button></div><div id="draftList" class="dlist"></div><p class="hint">แบบร่างเก็บในเบราว์เซอร์เครื่องนี้ (รวมรูปและเสียง) ถ้าล้างข้อมูลเบราว์เซอร์จะหายนะ</p>`)}
   `,true)}
 
   ${sec('🎨 ธีมและสีรวม',`
@@ -708,7 +753,7 @@ function buildUI(){
     ${grp('ตราขีผึ้ง',`${chk('ใช้ตราขีผึ้งแทนตราประทับธรรมดา','ui.wax.on')}${iff('ui.wax.on=true',`${sel('รูปทรง','ui.wax.shape',[['round','⚫ กลม'],['scallop','✴️ ขอบหยัก']])}<div class="colors">${colA('สีขีผึ้ง','ui.wax.c','#b3122d')}</div><p class="hint">อีโมจิจากช่อง "ตราประทับ" จะอยู่บนขีผึ้ง</p>`)}`)}
     ${grp('ข้อความใต้ซอง',`${txt('ข้อความใต้ซอง','env.hint')}${rng('ขนาดข้อความใต้ซอง','ui.hint.s',10,32,1,'px')}<div class="colors">${colA('สีข้อความใต้ซอง','ui.hint.c','colors.hint')}</div>`)}
     ${grp('ลูกเล่น',`${chk('มีเงาใต้ซอง','ui.ev.shadow')}${chk('ซองลอยขยับเบาๆ','ui.ev.bob')}`)}
-    ${rst('env;ui.seal;ui.hint;ui.ev;ui.ep;ui.eb;ui.air;ui.es;ui.wax')}
+    ${grp('ของในซอง (ดึงออกมาก่อนจดหมาย)',`<p class="hint">ใส่ภาพถ่าย โพลารอยด์ หรือการ์ดใบเล็กไว้ในซอง ผู้รับแตะหยิบทีละชิ้นก่อนถึงจดหมาย</p><div id="insBox"></div>`)}${rst('env;ui.seal;ui.hint;ui.ev;ui.ep;ui.eb;ui.air;ui.es;ui.wax;ins')}
   `)}
 
   ${sec('✨ แสงและแอนิเมชัน',`
@@ -720,7 +765,7 @@ function buildUI(){
 
   ${sec('✍️ การ์ดจดหมาย',`
     ${grp('เนื้อหา',`${txt('หัวจดหมาย','text.title')}${area('เนื้อหา','text.body',7)}${txt('ลงท้าย','text.sign')}${chk('พิมพ์ข้อความทีละตัวอักษร (แตะการ์ดเพื่อข้าม)','text.typewriter')}`)}
-    ${grp('รูปทรงการ์ด',`${rng('ความกว้างการ์ด','text.width',260,560,10,'px')}${rng('ความมนของมุม','adv.paperR',0,50,1,'px')}${rng('ความทึบของการ์ด','adv.paperOp',30,100,5,'%')}${chk('เงาใต้การ์ด','adv.paperShadow')}`)}
+    ${grp('✨ ตัวช่วยเขียนข้อความ',`<p class="hint">เลือกโอกาสกับน้ำเสียง แล้วระบบร่างให้ (กดสุ่มได้เรื่อยๆ) ค่อยแก้ต่อได้</p><label class="f"><span>โอกาส</span><select id="wOcc">${Object.keys(WR).map(k=>`<option value="${k}">${WR[k].n}</option>`).join('')}</select></label><label class="f"><span>น้ำเสียง</span><select id="wTone">${Object.keys(WT).map(k=>`<option value="${k}">${WT[k].n}</option>`).join('')}</select></label><label class="f"><span>ชื่อผู้รับ</span><input type="text" id="wTo"></label><label class="f"><span>ชื่อคนเขียน</span><input type="text" id="wFrom"></label><label class="f"><span>อยากแทรกประโยคของตัวเอง (ไม่ใส่ก็ได้)</span><input type="text" id="wDetail"></label><div class="row"><button type="button" class="btn ghost sm" id="wGen">✨ ร่าง / สุ่มใหม่</button><button type="button" class="btn sm" id="wUse">✅ ใช้ข้อความนี้</button></div><div class="seen" id="wOut" style="white-space:pre-wrap">ยังไม่ได้ร่าง</div>`)}${grp('จดหมายหลายหน้า',`<p class="hint">ผู้รับแตะการ์ดเพื่อพลิกหน้าถัดไป (แตะซ้ายสุดเพื่อย้อนกลับ) ปุ่มตอบรับและลงท้ายจะขึ้นที่หน้าสุดท้าย หน้าแรกคือเนื้อหาด้านบน</p><div id="pgBox"></div>`)}${grp('ข้อความตั้งเวลา',`<p class="hint">ข้อความที่โผล่เองหลังผ่านไปกี่วินาทีก็ได้ เช่น ข้อความที่สองหลังเริ่มอ่าน 5 วินาที</p><div id="lateBox"></div>`)}${grp('รูปทรงการ์ด',`${rng('ความกว้างการ์ด','text.width',260,560,10,'px')}${rng('ความมนของมุม','adv.paperR',0,50,1,'px')}${rng('ความทึบของการ์ด','adv.paperOp',30,100,5,'%')}${chk('เงาใต้การ์ด','adv.paperShadow')}`)}
     ${grp('สีการ์ด',`<div class="colors">${col('สีกระดาษ','colors.paper')}${col('สีหัวข้อ/ปุ่มหลัก','colors.accent')}</div>`)}
     ${grp('ลวดลายกระดาษ',pat('ui.pp','colors.accent'))}
     ${grp('ขอบการ์ด',`<span class="hint">ขอบเรืองด้านใน</span>${rng('ความหนาขอบใน','ui.pb.w',0,20,1,'px')}<div class="colors">${colA('สีขอบใน','ui.pb.c','colors.accent')}</div><span class="hint">ขอบด้านนอก</span>${brd('ui.po','colors.accent')}${air('ui.pa')}<span class="hint">กรอบซ้อนด้านใน</span>${chk('มีกรอบซ้อนด้านใน','ui.pf.on')}${iff('ui.pf.on=true',`${rng('ระยะห่างจากขอบ','ui.pf.gap',4,30,1,'px')}${rng('ความหนาเส้น','ui.pf.w',1,6,1,'px')}${sel('ลายเส้น','ui.pf.st',BSTY)}<div class="colors">${colA('สีกรอบ','ui.pf.c','colors.accent')}</div>`)}`)}
@@ -753,7 +798,7 @@ function buildUI(){
   `)}
 
   ${sec('🎵 เสียง',`
-    ${grp('ไฟล์เสียง',`<div class="row">
+    ${grp('เพลงจากลิงก์ (YouTube / Spotify)',`${sel('ใช้เพลงจาก','audio.source',[['file','📁 ไฟล์ / อัดเสียง (หัวข้อด้านล่าง)'],['link','🔗 ลิงก์ YouTube / Spotify']])}${iff('audio.source=link',`${txt('วางลิงก์เพลง','audio.link','https://youtu.be/... หรือ https://open.spotify.com/track/...')}<p class="hint" id="mlInfo"></p><p class="hint">YouTube เล่นอัตโนมัติได้บนเครื่องส่วนใหญ่ (iPhone บางรุ่นต้องแตะเล่นเอง) · Spotify ฝังได้แต่ผู้รับต้องแตะ ▶ เอง และอาจฟังได้แค่ 30 วินาทีถ้าไม่ได้ล็อกอิน · ปรับความดังจากลิงก์ไม่ได้ · วิดีโอที่เจ้าของปิดการฝังจะเล่นไม่ได้ ลองกด 👀 ดูตัวอย่างก่อนส่ง</p>`)}`)}${grp('ไฟล์เสียง',`<div class="row">
       <label class="btn ghost sm file">📁 เลือกไฟล์เสียง<input type="file" id="audioIn" accept="audio/*"></label>
       <button class="btn ghost sm" id="recBtn">🎙️ อัดเสียง</button>
       <button class="btn ghost sm" id="audioDel" hidden>🗑️ ลบเสียง</button>
@@ -843,7 +888,7 @@ function buildUI(){
   <div class="ntf" id="ntf" hidden></div><div id="pvBack" hidden></div>
   <div class="pvtools" id="pvTools" hidden><button type="button" class="chip on" data-dev="full">📱 เต็มจอ</button><button type="button" class="chip" data-dev="s">มือถือเล็ก</button><button type="button" class="chip" data-dev="m">มือถือ</button><button type="button" class="chip" data-dev="t">แท็บเล็ต</button></div>`;
   $('#jump').innerHTML=[...document.querySelectorAll('#app .card')].map((d,i)=>{d.id='s'+i;return `<button class="chip" data-jump="s${i}">${d.querySelector('summary').textContent.trim()}</button>`}).join('');
-  bindAll();renderPhotos();renderFall();renderAudio();renderYA();renderBG();markTheme();markEff();refreshVis();renderTpls();renderDrafts();
+  bindAll();renderPhotos();renderFall();renderAudio();renderYA();renderBG();markTheme();markEff();refreshVis();renderTpls();renderDrafts();renderLists();
 }
 
 function bindAll(){
@@ -859,7 +904,8 @@ function fbVal(f){if(f[0]==='#')return f;if(f.startsWith('dark:')){const[,p,t]=f
 function applyBPV(){const ok=v=>/^#[0-9a-f]{3,8}$/i.test(v||''),C=S.colors;document.querySelectorAll('[data-bpv]').forEach(el=>{const k=el.dataset.bpv,b=S.ui.b[k];
   const bg=ok(b.bg)?b.bg:k==='no'?`color-mix(in srgb,${C.text},#fff 45%)`:C.accent,R={pill:'999px',round:'14px',sq:'3px'}[b.shape||S.btn.shape]||'999px';
   el.style.cssText=`background:${bg};color:${ok(b.fg)?b.fg:'#fff'};border-radius:${R};font-size:${b.scale/100}em;${b.bw>0?`border:${b.bw}px solid ${ok(b.bd)?b.bd:'currentColor'};`:''}box-shadow:${b.shadow===false?'none':'0 6px 14px rgba(0,0,0,.22)'}`})}
-function refreshVis(){
+function updMl(){const e=$('#mlInfo');if(!e)return;const l=S.audio.link,m=parseMusic(l);e.textContent=!l?'':m?'✅ รองรับ: '+(m.k==='yt'?'YouTube':'Spotify'):'⚠️ ลิงก์นี้ใช้ไม่ได้ (รองรับวิดีโอ YouTube และเพลง/อัลบั้ม/เพลย์ลิสต์ Spotify)'}
+function refreshVis(){updMl();
   document.querySelectorAll('[data-if]').forEach(el=>{
     const m=el.dataset.if.match(/^(.+?)(!?=)(.+)$/);if(!m)return;
     const eq=String(get(S,m[1]))===m[3];el.hidden=m[2]==='='?!eq:eq;
@@ -951,7 +997,7 @@ document.addEventListener('click',async e=>{
   if(t.dataset.del!==undefined){S.photos.splice(+t.dataset.del,1);renderPhotos();persist()}
   if(t.dataset.delfall!==undefined){S.fall.img=null;renderFall();persist()}
   if(t.dataset.auto){set(S,t.dataset.auto,'');bindAll();persist()}
-  if(t.dataset.reset&&confirm('คืนค่าเริ่มต้นของหมวดนี้?')){t.dataset.reset.split(';').forEach(p=>set(S,p,clone(get(DEFAULT,p))));bindAll();markTheme();refreshVis();persist()}
+  if(t.dataset.reset&&confirm('คืนค่าเริ่มต้นของหมวดนี้?')){t.dataset.reset.split(';').forEach(p=>set(S,p,clone(get(DEFAULT,p))));bindAll();renderLists();markTheme();refreshVis();persist()}
   if(t.dataset.jump){const d=document.getElementById(t.dataset.jump);document.querySelectorAll('#app .card').forEach(x=>x.open=x===d);d.scrollIntoView({behavior:'smooth',block:'start'})}
   if(t.dataset.try){sfx(get(S,t.dataset.try))}
   if(t.id==='recBtn')toggleRec('recBtn',()=>S.audio,renderAudio);
@@ -962,12 +1008,18 @@ document.addEventListener('click',async e=>{
   if(t.id==='audioDel'){S.audio.src=null;S.audio.name='';renderAudio();persist()}
   if(t.id==='pvBtn')openPreview();
   if(t.id==='shareBtn')createLink();
-  if(t.id==='resetBtn'&&confirm('ล้างค่าทั้งหมดและเริ่มใหม่?')){S=clone(DEFAULT);try{localStorage.removeItem('llDraft')}catch(_){}bindAll();renderPhotos();renderFall();renderAudio();renderYA();renderBG();markTheme();markEff();refreshVis()}
+  if(t.id==='resetBtn'&&confirm('ล้างค่าทั้งหมดและเริ่มใหม่?')){S=clone(DEFAULT);try{localStorage.removeItem('llDraft')}catch(_){}refreshAll()}
+  if(t.dataset.ladd){const k=t.dataset.ladd;get(S,k).push(k==='ins'?{kind:'polaroid',img:null,cap:''}:k==='late'?{text:'',delay:5,from:'read',st:'inline'}:{t:'',b:''});renderLists();persist()}
+  if(t.dataset.lrm){const[k,i]=t.dataset.lrm.split(':');get(S,k).splice(+i,1);renderLists();persist()}
+  if(t.id==='wGen')genDraft();
+  if(t.id==='wUse'){if(!W)return showBanner('กด ✨ ร่าง ก่อนนะ');S.text.title=W.t;S.text.body=W.b;S.text.sign=W.s;bindAll();persist();showBanner('ใส่ข้อความลงในจดหมายแล้ว 💌')}
+  if(t.id==='tplSave')saveTpl();
   if(t.id==='sheet')t.hidden=true;
 });
 document.addEventListener('change',async e=>{
   const t=e.target;
   try{
+    if(t.dataset.insimg!==undefined&&t.files[0]){S.ins[+t.dataset.insimg].img=await fileToImg(t.files[0],700);renderLists();persist()}
     if(t.id==='photoIn'){for(const f of t.files){S.photos.push(await fileToImg(f,1000))}t.value='';renderPhotos();persist()}
     if(t.id==='fallImgIn'&&t.files[0]){S.fall.img=await fileToImg(t.files[0],128,'image/png');t.value='';renderFall();persist()}
     if(t.id==='audioIn'&&t.files[0]){
@@ -1000,7 +1052,7 @@ function renderTpls(){
   const box=$('#tpls');if(!box)return;
   box.innerHTML=TPL.map((t,i)=>{const C=tplColors(t);return `<button type="button" class="tpl" data-tpl="${i}"><b>${t.e}</b><span>${t.n}</span><small>${t.d}</small><div class="sw">${[C.bg2,C.env,C.flap,C.accent].map(x=>`<u style="background:${x}"></u>`).join('')}</div></button>`}).join('');
 }
-function refreshAll(){bindAll();renderPhotos();renderFall();renderAudio();renderYA();renderBG();markTheme();markEff();refreshVis()}
+function refreshAll(){bindAll();renderPhotos();renderFall();renderAudio();renderYA();renderBG();markTheme();markEff();refreshVis();renderLists()}
 function applyTemplate(i){
   const t=TPL[i];if(!t)return;
   if(!confirm('ใช้เทมเพลต "'+t.n+'"?\nการตั้งค่าที่ทำไว้จะถูกแทนที่ (รูปและเสียงที่เพิ่มไว้จะยังอยู่)'))return;
@@ -1022,7 +1074,7 @@ async function renderDrafts(){
   const box=$('#draftList');if(!box)return;
   try{
     const list=(await DB.all()||[]).sort((a,b)=>b.t-a.t);
-    box.innerHTML=list.length?list.map(d=>`<div class="dit"><div><b>${esc(d.name)}</b><small>${new Date(d.t).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})} · ${(JSON.stringify(d.cfg).length/1048576).toFixed(1)} MB</small></div><button type="button" class="btn ghost sm" data-dload="${encodeURIComponent(d.name)}">เปิด</button><button type="button" class="btn ghost sm" data-ddel="${encodeURIComponent(d.name)}">🗑️</button></div>`).join(''):'<p class="hint">ยังไม่มีแบบร่างที่บันทึกไว้</p>';
+    box.innerHTML=list.length?list.map(d=>`<div class="dit"><div><b>${esc(d.name)}</b><small>${d.tpl?'⭐ เทมเพลต · ':''}${new Date(d.t).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})} · ${(JSON.stringify(d.cfg).length/1048576).toFixed(1)} MB</small></div><button type="button" class="btn ghost sm" data-dload="${encodeURIComponent(d.name)}">เปิด</button><button type="button" class="btn ghost sm" data-ddel="${encodeURIComponent(d.name)}">🗑️</button></div>`).join(''):'<p class="hint">ยังไม่มีแบบร่างที่บันทึกไว้</p>';
   }catch(e){box.innerHTML='<p class="hint">เบราว์เซอร์นี้เก็บแบบร่างไม่ได้ (อาจอยู่ในโหมดส่วนตัว)</p>'}
 }
 async function saveDraft(){
@@ -1037,7 +1089,7 @@ async function loadDraftByName(name){
   try{
     const d=(await DB.all()||[]).find(x=>x.name===name);if(!d)return;
     if(!confirm('เปิดแบบร่าง "'+name+'"? สิ่งที่แก้ค้างอยู่ตอนนี้จะถูกแทนที่ (ถ้าอยากเก็บไว้ให้กดบันทึกก่อน)'))return;
-    S=merge(clone(DEFAULT),clone(d.cfg));refreshAll();persist();showBanner('เปิดแบบร่าง "'+name+'" แล้ว');
+    const kp=d.tpl?{p:S.photos,a:S.audio,b:S.adv.bgImg,f:S.fall.img,y:S.btn.after.ya}:null;S=merge(clone(DEFAULT),clone(d.cfg));if(kp){S.photos=kp.p;S.audio.src=kp.a.src;S.audio.name=kp.a.name;S.adv.bgImg=kp.b;S.fall.img=kp.f;S.btn.after.ya=kp.y}refreshAll();persist();showBanner('เปิดแบบร่าง "'+name+'" แล้ว');
   }catch(e){alert('เปิดแบบร่างไม่สำเร็จ')}
 }
 
@@ -1084,6 +1136,51 @@ function startWatch(id){
     }catch(e){}
   };
   poll();watchT=setInterval(poll,4000);
+}
+
+/* ---------- ตัวช่วยเขียน / รายการเพิ่มได้ / ตรวจก่อนส่ง / เทมเพลตของฉัน ---------- */
+const WR={
+ sorry:{n:'💔 ขอโทษ',t:'ขอโทษนะ{to}',o:['เรารู้ตัวแล้วว่าเราทำผิดไป~','ขอโทษที่ทำให้เสียใจ~'],m:['ที่ผ่านมาเราใส่ใจน้อยไป ทั้งที่เธอสำคัญกับเรามาก~','ทุกครั้งที่เธอเงียบ ใจเรามันแย่มากเลย~'],c:['ให้โอกาสเราแก้ตัวอีกครั้งนะ~','คืนดีกันนะ~']},
+ bday:{n:'🎂 วันเกิด',t:'สุขสันต์วันเกิด {to}',o:['วันนี้เป็นวันพิเศษของเธอ~','ขอให้ปีนี้เป็นปีที่ดีที่สุดของเธอ~'],m:['ขอให้สุขภาพแข็งแรง สมหวังทุกเรื่อง~','ขอบคุณที่เกิดมาเป็นคนสำคัญของเรา~'],c:['ขอให้มีความสุขมากๆ วันนี้เลย~','เดี๋ยวเรามีเซอร์ไพรส์ให้อีกนะ~']},
+ love:{n:'💜 สารภาพรัก',t:'มีอะไรจะบอก{to}',o:['มีเรื่องที่อยากบอกเธอมานานแล้ว~','ช่วงนี้เราคิดถึงเธอทุกวันเลย~'],m:['อยู่ใกล้เธอทีไร เรามีความสุขทุกที~','เธอเป็นคนแรกที่เรานึกถึงเสมอ~'],c:['เราชอบเธอนะ ลองคบกับเราไหม~','ให้เราดูแลเธอได้ไหม~']},
+ thanks:{n:'🙏 ขอบคุณ',t:'ขอบคุณนะ{to}',o:['อยากขอบคุณสำหรับทุกอย่างที่ผ่านมา~','ขอบคุณที่อยู่ข้างๆ กันเสมอ~'],m:['คำพูดและกำลังใจของเธอมีความหมายกับเรามาก~','ไม่รู้ว่าถ้าไม่มีเธอ เราจะผ่านมาได้ไหม~'],c:['ขอบคุณจริงๆ นะ~','ถ้าเธอต้องการอะไร เราพร้อมช่วยเสมอ~']},
+ miss:{n:'🌙 คิดถึง',t:'คิดถึง{to}',o:['ช่วงนี้นึกถึงเธอบ่อยมากเลย~','ไม่ได้เจอกันนานแล้วนะ~'],m:['เห็นอะไรก็นึกถึงเธอไปหมด~','อยากเล่าเรื่องวันนี้ให้เธอฟังจัง~'],c:['เจอกันเร็วๆ นี้นะ~','ดูแลตัวเองด้วยนะ~']},
+ anni:{n:'💞 ครบรอบ',t:'ครบรอบของเรา',o:['เวลาผ่านไปเร็วมากเลย~','ขอบคุณที่อยู่ด้วยกันมาถึงวันนี้~'],m:['ทุกวันกับเธอคือความทรงจำที่ดีที่สุด~','ผ่านเรื่องดีและเรื่องแย่มาด้วยกัน~'],c:['ขออยู่ด้วยกันแบบนี้ไปอีกนานๆ นะ~','รักเธอเหมือนวันแรกเลย~']}
+};
+const WT={sweet:{n:'💗 หวานซึ้ง',e:' นะ 💗',t:' 💗',i:''},cute:{n:'🥺 น่ารักขี้เล่น',e:' น้าา 🥺',t:' ✨',i:'แงงง มีเรื่องจะบอก 🥺'},sincere:{n:'🤍 จริงใจ นุ่มลึก',e:'',t:'',i:''},funny:{n:'😆 ตลกกวนๆ',e:' 😆',t:' 😝',i:'ประกาศจากกองบัญชาการหัวใจ 📢'}};
+let W=null;
+function genDraft(){
+  const o=WR[$('#wOcc').value],tn=WT[$('#wTone').value],to=($('#wTo').value||'').trim()||'เธอ',fr=($('#wFrom').value||'').trim(),ex=($('#wDetail').value||'').trim(),pk=a=>a[Math.floor(Math.random()*a.length)];
+  const f=x=>x.replace(/~/g,tn.e).replace(/\{to\}/g,' '+to).replace(/ +/g,' ').trim();
+  W={t:f(o.t)+tn.t,b:[tn.i,f(pk(o.o)),f(pk(o.m)),ex,f(pk(o.c))].filter(Boolean).join('\n'),s:fr?'จาก'+fr+tn.t:''};
+  $('#wOut').textContent=W.t+'\n\n'+W.b+(W.s?'\n\n'+W.s:'');
+}
+function renderLists(){
+  const L=(id,key,fn,add,max)=>{const b=$('#'+id);if(!b)return;const a=get(S,key)||[];b.innerHTML=a.map((x,i)=>`<div class="sub">${fn(x,key+'.'+i,i)}<button type="button" class="chip mini" data-lrm="${key}:${i}">🗑 ลบ</button></div>`).join('')+(a.length<max?`<button type="button" class="chip" data-ladd="${key}">${add}</button>`:'')};
+  L('insBox','ins',(x,k,i)=>`${F_.sel('ชนิด',k+'.kind',[['polaroid','📸 โพลารอยด์'],['photo','🖼 ภาพถ่าย'],['card','💌 การ์ดใบเล็ก']])}<div class="row"><label class="btn ghost sm file">＋ เลือกรูป<input type="file" accept="image/*" data-insimg="${i}"></label>${x.img?'<img src="'+x.img+'" style="height:44px;border-radius:8px">':''}</div>${F_.txt('ข้อความ / คำบรรยาย',k+'.cap')}`,'＋ เพิ่มของในซอง',5);
+  L('pgBox','text.pages',(x,k,i)=>`<div class="subh">หน้า ${i+2}</div>${F_.txt('หัวหน้านี้ (เว้นว่างได้)',k+'.t')}${F_.area('เนื้อหา',k+'.b',4)}`,'＋ เพิ่มหน้า',9);
+  L('lateBox','late',(x,k)=>`${F_.area('ข้อความที่จะโผล่ทีหลัง',k+'.text',2)}${F_.rng('หลังผ่านไป',k+'.delay',1,120,1,' วินาที')}${F_.sel('นับจาก',k+'.from',[['read','เริ่มอ่านจดหมาย'],['open','เปิดซอง'],['start','แตะปุ่มเริ่ม']])}${F_.sel('โผล่แบบ',k+'.st',[['inline','ต่อท้ายในจดหมาย (หน้าสุดท้าย)'],['bubble','ข้อความลอยบนจอ']])}`,'＋ เพิ่มข้อความตั้งเวลา',5);
+  bindAll();
+}
+function preCheck(){
+  const w=[],a=S.audio,L=S.adv,sz=JSON.stringify(S).length/1048576;
+  if(!(S.text.body||'').trim()&&!S.text.pages.some(p=>p.b))w.push('ยังไม่ได้เขียนเนื้อหาจดหมาย');
+  if(!(S.text.title||'').trim())w.push('หัวจดหมายว่างอยู่');
+  if(S.text.pages.some(p=>!p.b&&!p.t))w.push('มีหน้าเพิ่มที่ยังว่าง (จะถูกข้าม)');
+  if(S.late.some(m=>!(m.text||'').trim()))w.push('มีข้อความตั้งเวลาที่ยังว่าง (จะถูกข้าม)');
+  if(S.ins.some(x=>!x.img&&!x.cap))w.push('มีของในซองที่ยังไม่ใส่รูปหรือข้อความ (จะถูกข้าม)');
+  if(a.source==='link'){if(!a.link)w.push('เลือกเพลงจากลิงก์ แต่ยังไม่ได้วางลิงก์');else if(!parseMusic(a.link))w.push('ลิงก์เพลงใช้ไม่ได้ (รองรับ YouTube / Spotify)')}
+  else if(!a.src)w.push('ยังไม่ได้ใส่เสียงหรือเพลง (ไม่ใส่ก็ได้)');
+  else if(a.src.length*.75>8*1048576)w.push('ไฟล์เสียงใหญ่กว่า 8 MB ลิงก์จะโหลดช้า');
+  if(L.unlockOn&&!L.unlockAt)w.push('เปิดล็อกเวลาไว้ แต่ยังไม่ได้เลือกวันเวลา');
+  if(S.btn.after.linkMode!=='none'&&!S.btn.after.link)w.push('ตั้งให้เปิดลิงก์หลังกดตอบรับ แต่ยังไม่ได้ใส่ลิงก์');
+  if(sz>15)w.push('ข้อมูลรวม ~'+sz.toFixed(1)+' MB ผู้รับอาจโหลดช้า');
+  return w;
+}
+async function saveTpl(){
+  const inp=$('#dName'),nm=(inp.value||'').trim();if(!nm){alert('ตั้งชื่อเทมเพลตในช่องด้านบนก่อนนะ');return}
+  const c=clone(S);c.photos=[];c.audio.src=null;c.audio.name='';c.adv.bgImg=null;c.fall.img=null;c.btn.after.ya={src:null,name:''};c.ins.forEach(x=>x.img=null);
+  try{await DB.put({name:'⭐ '+nm,t:Date.now(),cfg:c,tpl:1});inp.value='';await renderDrafts();showBanner('เก็บเป็นเทมเพลต "'+nm+'" แล้ว เปิดได้จากรายการด้านบน (รูปและเสียงปัจจุบันจะไม่ถูกแทนที่)')}catch(e){alert('บันทึกไม่สำเร็จ')}
 }
 
 /* ---------- ตัวอย่าง ---------- */
@@ -1152,7 +1249,7 @@ function showLink(id,remaining,note){
   draw();startWatch(id);
   linkTimer=setInterval(tick,1000);
 }
-async function createLink(){
+async function createLink(){const w=preCheck(),sz=JSON.stringify(S).length/1048576;if(sz>58){alert('ข้อมูลรวม ~'+sz.toFixed(0)+' MB ใหญ่เกินกว่าเซิร์ฟเวอร์รับได้ (สูงสุด 60 MB) ลองลดรูปหรือเสียงก่อนนะ');return}if(w.length&&!confirm('ตรวจก่อนส่ง ⚠️\n• '+w.join('\n• ')+'\n\nสร้างลิงก์ต่อเลยไหม?'))return;
   const sheet=$('#sheet'),box=$('#sheetIn');sheet.hidden=false;
   clearInterval(linkTimer);
   box.innerHTML=`<h3>กำลังตรวจสอบ…</h3>`;
