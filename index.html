@@ -66,18 +66,18 @@ audio{width:100%}
 .vroot .fx{z-index:20}
 .envwrap{position:absolute;transform:translate(-50%,-50%) scale(var(--s));z-index:3;text-align:center;cursor:pointer;transition:opacity .5s,transform .6s}
 .envwrap.gone{opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(var(--s)) translateY(50px)}
-.envelope{position:relative;width:300px;height:200px;filter:drop-shadow(0 16px 22px rgba(0,0,0,.28));animation:bob 3.2s ease-in-out infinite}
+.envelope{position:relative;width:var(--ew,300px);height:var(--eh,200px);filter:drop-shadow(0 16px 22px rgba(0,0,0,.28));animation:bob 3.2s ease-in-out infinite}
 .envwrap.started .envelope{animation:none}
 @keyframes bob{50%{transform:translateY(-8px) rotate(-.6deg)}}
 .e-back{position:absolute;inset:0;border-radius:6px;background:color-mix(in srgb,var(--env),#000 16%)}
 .e-letter{position:absolute;left:6%;right:6%;top:6%;height:88%;background:var(--paper);border-radius:4px;z-index:2;padding:16px 14px;display:flex;flex-direction:column;gap:10px;transition:transform .7s cubic-bezier(.3,1.35,.5,1) .5s}
 .e-letter i{display:block;height:5px;border-radius:3px;background:color-mix(in srgb,var(--text),transparent 82%)}
 .e-letter i:nth-child(2){width:80%}.e-letter i:nth-child(3){width:90%}.e-letter i:nth-child(4){width:55%}
-.e-pocket{position:absolute;inset:0;z-index:3;border-radius:6px;background:linear-gradient(180deg,color-mix(in srgb,var(--env),#fff 10%),var(--env));clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
-.e-flap{position:absolute;left:0;top:0;width:100%;height:112px;z-index:4;background:var(--flap);transform-origin:top;clip-path:polygon(0 0,100% 0,50% 100%);transition:transform .6s ease,z-index 0s .3s}
-.e-seal{position:absolute;left:50%;top:112px;transform:translate(-50%,-50%);z-index:5;font-size:36px;line-height:1;transition:.35s;filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))}
+.e-pocket{position:absolute;inset:0;z-index:3;border-radius:6px;background:linear-gradient(180deg,color-mix(in srgb,var(--env),#fff 10%),var(--env));clip-path:polygon(0 0,50% var(--fh,112px),100% 0,100% 100%,0 100%)}
+.e-flap{position:absolute;left:0;top:0;width:100%;height:var(--fh,112px);z-index:4;background:var(--flap);transform-origin:top;clip-path:polygon(0 0,100% 0,50% 100%);transition:transform .6s ease,z-index 0s .3s}
+.e-seal{position:absolute;left:50%;top:var(--fh,112px);transform:translate(-50%,-50%);z-index:5;font-size:36px;line-height:1;transition:.35s;filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))}
 .opened .e-flap{transform:perspective(700px) rotateX(180deg);z-index:1}
-.opened .e-letter{transform:translateY(-80px)}
+.opened .e-letter{transform:translateY(calc(var(--lift,80px) * -1))}
 .opened .e-seal{opacity:0;transform:translate(-50%,-50%) scale(.2)}
 .e-hint{margin-top:30px;font-weight:600;font-size:17px;animation:blink 1.8s ease-in-out infinite}
 .envwrap.started .e-hint{opacity:0;animation:none}
@@ -157,6 +157,29 @@ a.vb{text-decoration:none;display:inline-block}
 .e-frame{z-index:6}
 .bgp{position:absolute;inset:0;pointer-events:none;z-index:0}
 .paper .pframe{position:absolute;pointer-events:none;display:none}
+.e-strip{position:absolute;left:0;top:0;width:100%;height:30px;z-index:4;background:var(--flap);display:none;transform-origin:left top;transition:transform .7s ease,opacity .5s ease;border-radius:6px 6px 0 0;border-bottom:2px dashed rgba(0,0,0,.28)}
+.opened .e-strip{transform:translate(60px,-70px) rotate(18deg);opacity:0}
+.e-tie{position:absolute;inset:0;z-index:5;pointer-events:none;display:none;transition:opacity .4s,transform .5s}
+.e-tie i{position:absolute;background:var(--tc,#e53935);box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.e-tie i:nth-child(1){left:calc(50% - 9px);width:18px;top:0;bottom:0}
+.e-tie i:nth-child(2){top:calc(62% - 9px);height:18px;left:0;right:0}
+.e-tie b{position:absolute;left:50%;top:62%;transform:translate(-50%,-50%);font-size:34px;line-height:1;font-weight:400}
+.opened .e-tie{opacity:0;transform:scale(1.06)}
+/* builder: เทมเพลต แบบร่าง แจ้งเตือน ตัวอย่างหลายขนาดจอ */
+.tpls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tpl{border:1.5px solid #f1d3e6;background:#fff;border-radius:16px;padding:10px;text-align:left;font:inherit;cursor:pointer;display:grid;gap:4px;color:#3b1d3a;align-content:start}
+.tpl:active{transform:scale(.98)}
+.tpl b{font-size:26px;line-height:1;font-weight:400}.tpl span{font-weight:600;font-size:14px}
+.tpl small{color:#9a7195;font-size:11.5px;line-height:1.35}
+.tpl .sw{display:flex;gap:4px}.tpl .sw u{width:14px;height:14px;border-radius:50%;display:inline-block;text-decoration:none;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.dlist{display:grid;gap:8px}
+.dit{display:flex;align-items:center;gap:8px;border:1.5px solid #f6dbe8;border-radius:14px;padding:8px 10px;background:#fffafd}
+.dit>div{flex:1;min-width:0;display:grid}.dit b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dit small{color:#9a7195;font-size:11.5px}
+.ntf{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top));transform:translateX(-50%);background:#c2185b;color:#fff;padding:11px 18px;border-radius:999px;z-index:500;box-shadow:0 10px 28px rgba(194,24,91,.4);font-weight:600;font-size:14px;max-width:92%;text-align:center}
+.seen{background:#fff5f9;border:1.5px solid #f6dbe8;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.8;color:#7d4a73}
+.pvtools{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:101;display:flex;gap:6px;background:rgba(20,10,30,.78);padding:6px;border-radius:999px;backdrop-filter:blur(8px)}
+.pvtools .chip{padding:6px 12px;font-size:13px;white-space:nowrap}
+#pvBack{position:fixed;inset:0;background:rgba(20,12,30,.92);z-index:99}
 </style>
 </head>
 <body>
@@ -189,7 +212,7 @@ const DEFAULT={
   fall:{type:'hearts',emoji:'🥰 💖 ✨',img:null,count:40,speed:4,size:26,sway:true,when:'always'},
   audio:{src:null,name:'',trigger:'open',delay:5,loop:true,vol:80},
   adv:{bgImg:null,bgDim:0,angle:160,titleSize:100,lineH:175,letter:0,bold:false,italic:false,shadow:false,textOn:false,textColor:'#3b1d3a',titleOn:false,titleColor:'#d6336c',paperR:20,paperOp:100,paperShadow:true,btnScale:100,btnRadOn:false,btnRad:14,yesOn:false,yesColor:'#e91e63',noOn:false,noColor:'#888888',pageTitle:'',favicon:'',pass:'',passHint:'ใส่รหัสลับเพื่อเปิดจดหมาย',unlockOn:false,unlockAt:'',lockMsg:'ยังไม่ถึงเวลาเปิดนะ',css:''},
-  ui:{f:{title:'',body:'',sign:'',btn:''},tc:{title:'',body:'',sign:''},sign:{size:100,align:'right'},sp:{emoji:'💌',esize:64,card:'',cardT:'',r:26,ov:'',bw:0,bs:'solid',bc:''},seal:36,hint:{c:'',s:17},pb:{w:6,c:''},rs:{t:'',p:'',big:96,lb:'',lt:'',ov:''},toast:{bg:'',fg:''},x:'',ep:{type:'none',c:'',s:18,op:45},eb:{w:0,st:'solid',c:'',r:6},air:{on:false,w:9,c1:'#e53935',c2:'#1e88e5'},ev:{lin:'',sealBg:'',shadow:true,bob:true},pp:{type:'none',c:'',s:18,op:18},po:{w:0,st:'solid',c:''},pa:{on:false,w:12,c1:'#e53935',c2:'#1e88e5'},pf:{on:false,st:'dashed',w:2,c:'',gap:10},bp:{type:'none',c:'',s:26,op:25},pd:{w:0,st:'solid',c:''},b:{start:BS(),yes:BS(),no:BS(),back:BS(),re:BS(),link:BS()}},
+  ui:{f:{title:'',body:'',sign:'',btn:''},tc:{title:'',body:'',sign:''},sign:{size:100,align:'right'},sp:{emoji:'💌',esize:64,card:'',cardT:'',r:26,ov:'',bw:0,bs:'solid',bc:''},seal:36,hint:{c:'',s:17},pb:{w:6,c:''},rs:{t:'',p:'',big:96,lb:'',lt:'',ov:''},toast:{bg:'',fg:''},x:'',ep:{type:'none',c:'',s:18,op:45},eb:{w:0,st:'solid',c:'',r:6},air:{on:false,w:9,c1:'#e53935',c2:'#1e88e5'},ev:{lin:'',sealBg:'',shadow:true,bob:true},es:{shape:'classic',tie:false,tc:'',tieE:'🎀'},wax:{on:false,c:'',shape:'round'},gl:{on:false,target:'paper',mode:'pulse',c:'',speed:5},fx:{open:'none',emoji:'🌸 🌺 💮'},ba:{mode:'none',speed:5},pp:{type:'none',c:'',s:18,op:18},po:{w:0,st:'solid',c:''},pa:{on:false,w:12,c1:'#e53935',c2:'#1e88e5'},pf:{on:false,st:'dashed',w:2,c:'',gap:10},bp:{type:'none',c:'',s:26,op:25},pd:{w:0,st:'solid',c:''},b:{start:BS(),yes:BS(),no:BS(),back:BS(),re:BS(),link:BS()}},
   btn:{mode:'two',yes:'คืนดีกันนะ 🥺',no:'ไม่คืนดี 😤',noMode:'run',cycle:'ไม่ได้นะ 😝,คิดดีๆก่อนสิ,ขอร้องล่ะ 🥹,ใจร้ายอ่ะ,กดอีกปุ่มสิ!',yesResult:'รักที่สุดเลย 💖',yesSub:'ขอบคุณที่ให้อภัยนะ',sound:'pop',noSound:'boing',shape:'pill',
   sad:{big:'😢',title:'เสียใจนะ...',sub:'แต่เรายังรอเธออยู่เสมอ',back:'ขอโทษ ย้อนกลับ'},
   after:{screen:'full',big:'💖',letter:'',showPhoto:false,reread:true,reLabel:'อ่านอีกครั้ง',autoClose:0,effects:['burst','fireworks'],count:70,times:3,burstEmoji:'💖 💗 💕 ✨ 🎉 🥰 🌸',sound:'tada',audio:'none',ya:{src:null,name:''},bgOn:false,bg:'#ffd1e3',linkMode:'none',link:'',linkLabel:'เปิดดูเลย',linkDelay:4}}
@@ -250,8 +273,8 @@ function patBg(t,col,sz,op){
   const sq=`${s}px ${s}px`,sq2=`${s*2}px ${s*2}px`;
   switch(t){
     case 'dots':return{i:[`radial-gradient(circle at 50% 50%,${c} 0 ${s*.14}px,${T} ${s*.15}px)`],z:[sq]};
-    case 'stripes':{const p=s*.7;return{i:[`repeating-linear-gradient(45deg,${c} 0 ${p*.35}px,${T} ${p*.35}px ${p}px)`],z:['auto']}}
-    case 'vstripes':{const p=s*.7;return{i:[`repeating-linear-gradient(90deg,${c} 0 ${p*.35}px,${T} ${p*.35}px ${p}px)`],z:['auto']}}
+    case 'stripes':{const p=s*.7,w=(p*1.4142).toFixed(2);return{i:[`repeating-linear-gradient(45deg,${c} 0 ${p*.35}px,${T} ${p*.35}px ${p}px)`],z:[`${w}px ${w}px`]}}
+    case 'vstripes':{const p=s*.7;return{i:[`linear-gradient(90deg,${c} 35%,${T} 35%)`],z:[`${p}px ${p}px`]}}
     case 'grid':return{i:[`linear-gradient(${c} 1px,${T} 1px)`,`linear-gradient(90deg,${c} 1px,${T} 1px)`],z:[sq,sq]};
     case 'check':return{i:[`conic-gradient(${c} 25%,${T} 0 50%,${c} 0 75%,${T} 0)`],z:[sq]};
     case 'gingham':{const g=rgbaOf(h,a*.55);return{i:[`linear-gradient(90deg,${g} 50%,${T} 50%)`,`linear-gradient(${g} 50%,${T} 50%)`],z:[sq,sq]}}
@@ -260,7 +283,7 @@ function patBg(t,col,sz,op){
     case 'flowers':return{i:[two(FLOWER)],z:[sq2]};
     case 'waves':return{i:[svg(20,10,`<path d='M0 5Q5 0 10 5T20 5' fill='none' stroke='${h}' stroke-opacity='${a}' stroke-width='1.4'/>`)],z:[`${s*2}px ${s}px`]};
     case 'diamond':return{i:[svg(20,20,`<path d='M10 2L18 10 10 18 2 10Z' ${f}/>`)],z:[sq]};
-    case 'lines':return{i:[`repeating-linear-gradient(180deg,${T} 0 ${s-1}px,${c} ${s-1}px ${s}px)`],z:['auto']};
+    case 'lines':return{i:[`linear-gradient(180deg,${T} calc(100% - 1px),${c} 0)`],z:[sq]};
   }
   return null;
 }
@@ -270,7 +293,7 @@ function mountViewer(root,cfg,opt={}){
   const cleanup=[],timers=[];
   const to=(fn,ms)=>{const t=setTimeout(fn,ms);timers.push(t);return t};
   const num=(v,d)=>Number.isFinite(+v)?+v:d;
-  root.className='vroot';root.innerHTML='';
+  root.className='vroot';root.innerHTML='';root.style.animation='';root.style.backgroundSize='';
   for(const k in c.colors)root.style.setProperty('--'+k,c.colors[k]);
   root.style.setProperty('--font',c.font);
   root.style.setProperty('--s',num(c.env.scale,100)/100);
@@ -296,6 +319,7 @@ function mountViewer(root,cfg,opt={}){
     const BM={start:'.go',yes:'button.vb.yes',no:'button.vb.no',back:'.sb',re:'.re',link:'a.vb.rlink'},RAD={pill:'999px',round:'14px',sq:'3px'};
     for(const k in BM){const b=U.b[k];if(!b)continue;const s=bs*n(b.scale,100)/100;
       R.push(`${BM[k]}{font-size:${s}em;padding:${12*s}px ${22*s}px;${cl('background',b.bg)}${cl('color',b.fg)}${n(b.bw,0)>0?`border:${n(b.bw,0)}px solid ${hexOk(b.bd)?b.bd:'currentColor'};`:''}${RAD[b.shape]?'border-radius:'+RAD[b.shape]+';':''}${b.shadow===false?'box-shadow:none;animation:none;':''}${k==='yes'&&b.glow===false?'animation:none;':''}}`)}
+    let KF='';
     const BS_=v=>['solid','dashed','dotted','double','groove','ridge'].includes(v)?v:'solid',col2=(v,d)=>hexOk(v)?v:d;
     const pl=p=>p?p.i.map((im,k)=>({i:im,z:p.z[k]})):[];
     const lay=L=>`background-image:${L.map(x=>x.i).join(',')};background-size:${L.map(x=>x.z||'auto').join(',')};background-origin:${L.map(x=>x.o||'padding-box').join(',')};background-clip:${L.map(x=>x.o||'padding-box').join(',')};`;
@@ -303,11 +327,32 @@ function mountViewer(root,cfg,opt={}){
     {/* ซองจดหมาย: ลวดลาย ขอบ ไปรษณีย์อากาศ */
       const EP=U.ep,EB=U.eb,EA=U.air,EV=U.ev;
       const ep=patBg(EP.type,col2(EP.c,mixHex(hex6(c.colors.env,'#ff7aa8'),'#ffffff',55)),EP.s,EP.op);
-      if(ep)R.push(`.e-pocket{${lay(pl(ep).concat({i:'linear-gradient(180deg,color-mix(in srgb,var(--env),#fff 10%),var(--env))',z:'auto'}))}}.e-flap{${lay(pl(ep))}}.e-back{${lay(pl(ep))}}`);
+      if(ep)R.push(`.e-pocket{${lay(pl(ep).concat({i:'linear-gradient(180deg,color-mix(in srgb,var(--env),#fff 10%),var(--env))',z:'auto'}))}}.e-flap,.e-strip{${lay(pl(ep))}}.e-back{${lay(pl(ep))}}`);
       const ebw=Math.max(0,Math.min(12,n(EB.w,0))),ebr=Math.max(0,Math.min(40,n(EB.r,6))),eaw=Math.max(4,Math.min(30,n(EA.w,9)));
       R.push(`.e-back,.e-pocket,.e-frame{border-radius:${ebr}px}.e-frame{display:${ebw>0?'block':'none'};border:${ebw}px ${BS_(EB.st)} ${col2(EB.c,'color-mix(in srgb,var(--env),#000 35%)')}}.opened .e-frame{border-top-color:transparent}`);
       R.push(`.e-air{display:${EA.on?'block':'none'};inset:-${eaw}px;border-radius:${ebr+eaw}px;background:${stripes(eaw,col2(EA.c1,'#e53935'),col2(EA.c2,'#1e88e5'))}}`);
-      R.push(`.e-back{${cl('background-color',EV.lin)}}${hexOk(EV.sealBg)?`.e-seal{background:${EV.sealBg};border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center}`:''}${EV.shadow===false?'.envelope{filter:none}':''}${EV.bob===false?'.envelope{animation:none}':''}`);
+      R.push(`.e-back{${cl('background-color',EV.lin)}}${hexOk(EV.sealBg)?`.e-seal{background:${EV.sealBg};border-radius:50%;width:1.75em;height:1.75em;display:grid;place-items:center}`:''}${EV.shadow===false?'.envelope{filter:none}':''}`);
+      const ES=U.es,SZ={classic:[300,200,112,80],wide:[340,180,100,70],tall:[230,310,115,110],square:[260,260,130,100],tear:[300,200,30,80]}[ES.shape]||[300,200,112,80];
+      R.push(`.envelope{--ew:${SZ[0]}px;--eh:${SZ[1]}px;--fh:${SZ[2]}px;--lift:${SZ[3]}px}`);
+      if(ES.shape==='tear')R.push('.e-flap{display:none}.e-strip{display:block}.e-pocket{clip-path:none}.e-seal{top:16px}');
+      R.push(`.e-tie{display:${ES.tie?'block':'none'};--tc:${col2(ES.tc,'#e53935')}}`);
+      const WX=U.wax;
+      if(WX.on){
+        const wc=col2(WX.c,'#b3122d');
+        const pts=WX.shape==='scallop'?Array.from({length:32},(_,i)=>{const a=i/32*6.2832,r=i%2?44:50;return `${(50+r*Math.cos(a)).toFixed(1)}% ${(50+r*Math.sin(a)).toFixed(1)}%`}).join(','):'';
+        R.push(`.e-seal{width:1.9em;height:1.9em;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,color-mix(in srgb,${wc},#fff 35%),${wc} 55%,color-mix(in srgb,${wc},#000 35%));box-shadow:inset 0 0 0 .08em color-mix(in srgb,${wc},#000 25%),inset 0 -.1em .2em rgba(0,0,0,.3);text-shadow:0 1px 0 rgba(255,255,255,.3),0 -1px 1px rgba(0,0,0,.45);${pts?`clip-path:polygon(${pts});`:''}}`);
+      }
+      const GL=U.gl,gT=GL.target||'paper',gdur=Math.max(1.5,14-n(GL.speed,5)*1.2),gc=col2(GL.c,hex6(c.colors.accent,'#e0306f'));
+      const gs=(base,a,b,k)=>`${base}drop-shadow(0 0 ${a}px ${k}) drop-shadow(0 0 ${b}px ${k})`;
+      const mkKF=(name,base)=>{
+        if(GL.mode==='rainbow')return `@keyframes ${name}{`+['#ff4d6d','#ffd23f','#3ddc84','#38bdf8','#a78bfa','#ff4d6d'].map((k,i)=>`${i*20}%{filter:${gs(base,6,20,k)}}`).join('')+'}';
+        if(GL.mode==='blink')return `@keyframes ${name}{0%,49%{filter:${gs(base,8,22,gc)}}50%,100%{filter:${gs(base,0,0,'transparent')}}}`;
+        return `@keyframes ${name}{0%,100%{filter:${gs(base,4,10,gc)}}50%{filter:${gs(base,10,32,gc)}}}`;
+      };
+      const anims=[];if(EV.bob!==false)anims.push('bob 3.2s ease-in-out infinite');
+      if(GL.on&&(gT==='envelope'||gT==='both')){KF+=mkKF('glwE',EV.shadow===false?'':'drop-shadow(0 16px 22px rgba(0,0,0,.28)) ');anims.push(`glwE ${gdur}s ease-in-out infinite`)}
+      R.push(`.envelope{animation:${anims.join(',')||'none'}}`);
+      if(GL.on&&(gT==='paper'||gT==='both')){KF+=mkKF('glwP','');R.push(`.paper{animation:glwP ${gdur}s ease-in-out infinite}`)}
     }
     {/* การ์ดจดหมาย: ลวดลาย ขอบนอก ไปรษณีย์อากาศ กรอบซ้อน */
       const PP=U.pp,PO=U.po,PA=U.pa,PF=U.pf,pop=n(AV.paperOp,100),pc=`color-mix(in srgb,var(--paper),transparent ${100-pop}%)`;
@@ -326,9 +371,12 @@ function mountViewer(root,cfg,opt={}){
       if(n(U.sp.bw,0)>0)R.push(`.splash .card{border:${Math.min(12,n(U.sp.bw,0))}px ${BS_(U.sp.bs)} ${col2(U.sp.bc,'var(--accent)')}}`);
       const bp=patBg(U.bp.type,col2(U.bp.c,'#ffffff'),U.bp.s,U.bp.op);
       R.push(bp?`.bgp{background-image:${bp.i.join(',')};background-size:${bp.z.join(',')}}`:'.bgp{display:none}');
+      const BA=U.ba,bdur=Math.max(3,26-n(BA.speed,5)*2.4)*3;
+      if(BA.mode==='drift'&&bp){const m=bp.z[0].match(/[\d.]+/g)||['40'];R.push(`.bgp{--tw:${m[0]}px;--th:${m[1]||m[0]}px;animation:bgd ${bdur}s linear infinite}`);KF+='@keyframes bgd{to{background-position:var(--tw) var(--th)}}'}
+      if(BA.mode==='gradient'&&!(AV.bgImg&&/^data:image\//.test(AV.bgImg))){root.style.backgroundSize='300% 300%';root.style.animation=`bgsh ${bdur}s ease-in-out infinite`;KF+='@keyframes bgsh{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}'}
     }
     const css=String(AV.css||'').replace(/<\/?style/gi,'').replace(/@import[^;]*;?/gi,'').replace(/url\(\s*['"]?\s*(https?:)?\/\//gi,'url(blocked:');
-    const st=document.createElement('style');st.textContent='.vroot{'+R.join('')+css+'}';root.appendChild(st);
+    const st=document.createElement('style');st.textContent='.vroot{'+R.join('')+css+'}'+KF;root.appendChild(st);
     if(!opt.onClose){
       if(AV.pageTitle)document.title=AV.pageTitle;
       if(AV.favicon){const fv=document.createElement('link');fv.rel='icon';fv.href='data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">${String(AV.favicon).replace(/[<>&]/g,'').slice(0,4)}</text></svg>`);document.head.appendChild(fv)}
@@ -337,7 +385,7 @@ function mountViewer(root,cfg,opt={}){
   root.insertAdjacentHTML('beforeend',`
     <div class="bgp"></div><canvas class="fall"></canvas>
     <div class="envwrap" style="left:${num(c.env.x,50)}%;top:${num(c.env.y,50)}%">
-      <div class="envelope"><div class="e-air"></div><div class="e-back"></div><div class="e-letter"><i></i><i></i><i></i><i></i></div><div class="e-pocket"></div><div class="e-flap"></div><div class="e-seal"></div><div class="e-frame"></div></div>
+      <div class="envelope"><div class="e-air"></div><div class="e-back"></div><div class="e-letter"><i></i><i></i><i></i><i></i></div><div class="e-pocket"></div><div class="e-flap"></div><div class="e-strip"></div><div class="e-tie"><i></i><i></i><b></b></div><div class="e-seal"></div><div class="e-frame"></div></div>
       <div class="e-hint"></div>
     </div>
     <div class="reader"><div class="paper"><span class="pframe"></span><button class="x" aria-label="ปิด">✕</button><div class="photos top"></div><h2></h2><p class="body"></p><p class="sign"></p><div class="photos bottom"></div><div class="btns"></div></div></div>
@@ -347,8 +395,14 @@ function mountViewer(root,cfg,opt={}){
     <div class="toast"></div>
     <div class="splash"><div class="card"><div class="em">💌</div><h2></h2><button class="vb pill go"></button></div></div>`);
   const q=s=>root.querySelector(s);
+  const lid=(!opt.onClose&&location.pathname.match(/^\/l\/([a-z0-9]+)/)||[])[1];
+  const ping=ev=>{
+    if(!lid)return;
+    if(ev==='no'){const t=Date.now();if(t-(ping.n||0)<4000)return;ping.n=t}
+    try{fetch('/api/seen/'+lid,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ev}),keepalive:true}).catch(()=>{})}catch(e){}
+  };
   const envwrap=q('.envwrap'),envelope=q('.envelope'),reader=q('.reader'),paper=q('.paper'),btns=q('.btns'),result=q('.result.win'),sad=q('.result.sad'),splash=q('.splash'),toastEl=q('.toast');
-  q('.e-seal').textContent=c.env.seal||'';
+  q('.e-seal').textContent=c.env.seal||'';q('.e-tie b').textContent=c.ui.es.tieE||'🎀';
   q('.e-hint').textContent=c.env.hint||'';
   q('.splash h2').textContent=c.splash.text;
   q('.go').textContent=c.splash.btn||'เริ่ม';q('.splash .em').textContent=c.ui.sp.emoji||'';
@@ -384,7 +438,7 @@ function mountViewer(root,cfg,opt={}){
   /* ---------- canvas: ของที่ร่วง + พลุหัวใจ ---------- */
   const fall=q('.fall'),fx=q('.fx'),fctx=fall.getContext('2d'),xctx=fx.getContext('2d');
   let W=0,H=0,dpr=1;
-  function size(){const r=root.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(window.devicePixelRatio||1,2);[fall,fx].forEach(cv=>{cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px'})}
+  function size(){W=root.clientWidth;H=root.clientHeight;dpr=Math.min(window.devicePixelRatio||1,2);[fall,fx].forEach(cv=>{cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px'})}
   size();addEventListener('resize',size);cleanup.push(()=>removeEventListener('resize',size));
   const F=c.fall,list=fallEmojis(F);
   let fimg=null;
@@ -413,6 +467,14 @@ function mountViewer(root,cfg,opt={}){
     if(E.includes('flash')){const d=document.createElement('div');d.className='flash';root.appendChild(d);to(()=>d.remove(),800)}
     if(E.includes('boost'))doBoost();
     if(E.includes('vibrate')){try{navigator.vibrate&&navigator.vibrate([80,50,120,50,200])}catch(e){}}
+  }
+  function openFx(){
+    const X=c.ui.fx||{},t=X.open;
+    if(t==='petals'){const E=fallEmojis({type:'custom',emoji:X.emoji||'🌸'});for(let i=0;i<50;i++)bursts.push({k:'e',x:rand(0,W),y:rand(-H*.3,-10),vx:rand(-.8,.8),vy:rand(1.2,3),g:.01,dr:.998,d:.003,size:rand(18,34),e:E[i%E.length],life:1.6,r:rand(0,6),vr:rand(-.05,.05)})}
+    else if(t==='sparkle'){for(let i=0;i<4;i++)to(pShell,i*250)}
+    else if(t==='confetti'){pConfetti();to(pConfetti,350)}
+    else if(t==='burst')pBurst();
+    else if(t==='flash'){const d=document.createElement('div');d.className='flash';root.appendChild(d);to(()=>d.remove(),800)}
   }
   let raf;
   function frame(){
@@ -467,7 +529,7 @@ function mountViewer(root,cfg,opt={}){
     return true;
   }
   q('.go').onclick=()=>{
-    if(started||!gate())return;started=true;sfx(c.btn.sound);splash.classList.add('hide');
+    if(started||!gate())return;started=true;ping('start');sfx(c.btn.sound);splash.classList.add('hide');
     to(()=>splash.remove(),600);
     if(A.trigger==='start')playAu();
     else{unlockAu();if(A.trigger==='timer')to(playAu,Math.max(0,num(A.delay,5))*1000)}
@@ -479,7 +541,7 @@ function mountViewer(root,cfg,opt={}){
   function openLetter(){
     if(!started)return;
     if(!opened){
-      opened=true;envwrap.classList.add('started');envelope.classList.add('opened');sfx(c.btn.sound);
+      opened=true;ping('open');openFx();envwrap.classList.add('started');envelope.classList.add('opened');sfx(c.btn.sound);
       if(A.trigger==='open')playAu();
       if(F.type!=='none'&&F.when==='afterOpen'){fallOn=true}
       to(showReader,1500);
@@ -508,7 +570,7 @@ function mountViewer(root,cfg,opt={}){
     const B=c.btn;btns.innerHTML='';if(B.mode==='none')return;
     const mk=(cls,t)=>{const b=document.createElement('button');b.className='vb '+B.shape+' '+cls;b.textContent=t;return b};
     const yes=mk('yes',B.yes||'ตกลง');btns.appendChild(yes);
-    yes.onclick=()=>{sfx(B.sound);sayYes()};
+    yes.onclick=()=>{sfx(B.sound);ping('yes');sayYes()};
     let g=1;const growYes=()=>{g=Math.min(g+.1,1.7);yes.style.setProperty('--g',g)};
     if(B.mode==='two'){
       const no=mk('no',B.no||'ไม่');btns.appendChild(no);noEl=no;
@@ -516,33 +578,34 @@ function mountViewer(root,cfg,opt={}){
       const say=()=>toast(lines[n++%lines.length]||'');
       if(B.noMode==='run'){
         let last=0;
-        const go=e=>{e.preventDefault();const t=Date.now();if(t-last<300)return;last=t;flee(no,yes);growYes();sfx(B.noSound);say()};
+        const go=e=>{e.preventDefault();const t=Date.now();if(t-last<300)return;last=t;flee(no,yes);growYes();ping('no');sfx(B.noSound);say()};
         no.addEventListener('pointerenter',go);no.addEventListener('pointerdown',go);no.addEventListener('touchstart',go,{passive:false});no.addEventListener('click',go);
       }else if(B.noMode==='shrink'){
-        let sc=1;no.onclick=()=>{sfx(B.noSound);say();growYes();sc-=.2;if(sc<=.15)no.style.display='none';else no.style.transform=`scale(${sc})`};
+        let sc=1;no.onclick=()=>{ping('no');sfx(B.noSound);say();growYes();sc-=.2;if(sc<=.15)no.style.display='none';else no.style.transform=`scale(${sc})`};
       }else if(B.noMode==='cycle'){
-        no.onclick=()=>{sfx(B.noSound);growYes();no.textContent=lines[n++%lines.length]||B.no};
+        no.onclick=()=>{ping('no');sfx(B.noSound);growYes();no.textContent=lines[n++%lines.length]||B.no};
       }else if(B.noMode==='sad'){
-        no.onclick=()=>{sfx(B.noSound);growYes();sad.hidden=false};
-      }else{no.onclick=()=>{sfx(B.noSound);say()}}
+        no.onclick=()=>{ping('no');sfx(B.noSound);growYes();sad.hidden=false};
+      }else{no.onclick=()=>{ping('no');sfx(B.noSound);say()}}
     }
     btns.classList.add('in');
   }
   function flee(no,yes){
-    const rr=root.getBoundingClientRect();
+    const rr=root.getBoundingClientRect(),K=root.offsetWidth/(rr.width||1),W0=root.offsetWidth,H0=root.offsetHeight;
     if(no.parentNode!==root){
       const b=no.getBoundingClientRect();
-      const ph=document.createElement('span');ph.style.cssText=`display:inline-block;width:${b.width}px;height:${b.height}px`;
+      const ph=document.createElement('span');ph.style.cssText=`display:inline-block;width:${b.width*K}px;height:${b.height*K}px`;
       no.replaceWith(ph);root.appendChild(no);no.classList.add('fled');
-      no.style.left=(b.left-rr.left)+'px';no.style.top=(b.top-rr.top)+'px';void no.offsetWidth;
+      no.style.left=(b.left-rr.left)*K+'px';no.style.top=(b.top-rr.top)*K+'px';void no.offsetWidth;
     }
     const bw=no.offsetWidth,bh=no.offsetHeight,yb=yes.getBoundingClientRect();
+    const yl=(yb.left-rr.left)*K,yr=(yb.right-rr.left)*K,yt=(yb.top-rr.top)*K,ybt=(yb.bottom-rr.top)*K;
     const cur={x:parseFloat(no.style.left),y:parseFloat(no.style.top)};
-    let x,y,t=0;
+    let x,y,t=0,hit,near;
     do{
-      x=rand(10,Math.max(11,rr.width-bw-10));y=rand(10,Math.max(11,rr.height-bh-10));t++;
-      var hit=x<yb.right-rr.left+12&&x+bw>yb.left-rr.left-12&&y<yb.bottom-rr.top+12&&y+bh>yb.top-rr.top-12;
-      var near=Math.hypot(x-cur.x,y-cur.y)<90;
+      x=rand(10,Math.max(11,W0-bw-10));y=rand(10,Math.max(11,H0-bh-10));t++;
+      hit=x<yr+12&&x+bw>yl-12&&y<ybt+12&&y+bh>yt-12;
+      near=Math.hypot(x-cur.x,y-cur.y)<90;
     }while(t<40&&(hit||near));
     no.style.left=x+'px';no.style.top=y+'px';
   }
@@ -566,6 +629,7 @@ function mountViewer(root,cfg,opt={}){
   }
   q('.re').onclick=()=>{result.hidden=true;if(noEl)noEl.style.display=''};
 
+  ping('load');
   return()=>{cleanup.forEach(f=>f());timers.forEach(clearTimeout);root.innerHTML='';root.className='vroot'};
 }
 
@@ -605,13 +669,18 @@ function buildUI(){
   <div class="hero"><h1>Love Letter Studio</h1><p>ออกแบบซองจดหมายเซอร์ไพรส์ ใส่รูป ข้อความ เสียง และหัวใจที่ร่วงลงมา แล้วส่งเป็นลิงก์ให้คนพิเศษของคุณ</p></div>
   <nav class="jump" id="jump"></nav>
 
+  ${sec('🎁 เทมเพลตและแบบร่าง',`
+    ${grp('เทมเพลตสำเร็จรูป',`<p class="hint">เลือกแล้วระบบจะตั้งธีม ซอง ลาย ขอบ เอฟเฟกต์ และข้อความให้ทั้งชุด จากนั้นแก้ต่อได้ทุกอย่าง</p><div class="tpls" id="tpls"></div>`)}
+    ${grp('แบบร่างของฉัน',`<label class="f"><span>ตั้งชื่อแล้วบันทึกไว้</span><input type="text" id="dName" placeholder="เช่น ง้อแฟนครั้งที่ 2"></label><div class="row"><button type="button" class="btn ghost sm" id="dSave">💾 บันทึกแบบร่างนี้</button><button type="button" class="btn ghost sm" id="dNew">＋ เริ่มแบบร่างใหม่</button></div><div id="draftList" class="dlist"></div><p class="hint">แบบร่างเก็บในเบราว์เซอร์เครื่องนี้ (รวมรูปและเสียง) ถ้าล้างข้อมูลเบราว์เซอร์จะหายนะ</p>`)}
+  `,true)}
+
   ${sec('🎨 ธีมและสีรวม',`
     ${grp('เลือกธีมสำเร็จรูป',`<div class="chips" id="themes">${Object.keys(THEME_LABELS).map(k=>`<button class="chip" data-theme="${k}">${THEME_LABELS[k]}</button>`).join('')}</div>`)}
     ${grp('สีหลักทั้งหมด',`<p class="hint">ที่นี่รวมสีไว้ที่เดียว ปรับตรงนี้หรือในหมวดของแต่ละอย่างก็ได้ จะซิงก์กันเอง</p><div class="colors">${Object.keys(COLOR_LABELS).map(k=>col(COLOR_LABELS[k],'colors.'+k)).join('')}</div>`)}
     ${grp('สีตัวอักษรแต่ละส่วน',`<p class="hint">กด "อัตโนมัติ" เพื่อให้ใช้สีตามธีม</p><div class="colors">${colA('หัวจดหมาย','ui.tc.title','colors.accent')}${colA('เนื้อความ','ui.tc.body','colors.text')}${colA('ลงท้าย','ui.tc.sign','colors.text')}${colA('ข้อความใต้ซอง','ui.hint.c','colors.hint')}${colA('ข้อความหน้าเริ่มต้น','ui.sp.cardT','colors.text')}${colA('หัวข้อหน้าตอบรับ','ui.rs.t','colors.accent')}${colA('ข้อความรองหน้าตอบรับ','ui.rs.p','colors.hint')}${colA('ตัวอักษรข้อความเด้ง','ui.toast.fg','#ffffff')}</div>`)}
     ${grp('สีปุ่ม',`<div class="colors">${colA('ปุ่มเริ่ม','ui.b.start.bg','colors.accent')}${colA('ปุ่มตอบรับ','ui.b.yes.bg','colors.accent')}${colA('ปุ่มปฏิเสธ','ui.b.no.bg','mix:colors.text:45')}${colA('ตัวอักษรปุ่มเริ่ม','ui.b.start.fg','#ffffff')}${colA('ตัวอักษรปุ่มตอบรับ','ui.b.yes.fg','#ffffff')}${colA('ตัวอักษรปุ่มปฏิเสธ','ui.b.no.fg','#ffffff')}</div>`)}
     ${rst('theme;colors;ui.tc;ui.hint.c;ui.sp.cardT;ui.rs.t;ui.rs.p;ui.toast.fg;ui.b.start.bg;ui.b.start.fg;ui.b.yes.bg;ui.b.yes.fg;ui.b.no.bg;ui.b.no.fg',' สีทั้งหมด')}
-  `,true)}
+  `)}
 
   ${sec('🌅 พื้นหลังหน้าจอ',`
     ${grp('สีพื้นหลัง',`<div class="colors">${col('พื้นหลังบน','colors.bg1')}${col('พื้นหลังล่าง','colors.bg2')}${col('ตัวอักษรบนพื้นหลัง','colors.hint')}</div>${rng('ทิศไล่สีพื้นหลัง','adv.angle',0,360,5,'°')}`)}
@@ -630,13 +699,22 @@ function buildUI(){
 
   ${sec('💌 ซองจดหมาย',`
     ${grp('ขนาดและตำแหน่ง',`${rng('ขนาดซอง','env.scale',50,170,1,'%')}${rng('ตำแหน่ง แนวนอน','env.x',10,90,1,'%')}${rng('ตำแหน่ง แนวตั้ง','env.y',15,85,1,'%')}`)}
+    ${grp('รูปทรงซอง',`${sel('รูปทรง','ui.es.shape',[['classic','📮 คลาสสิก'],['wide','✉️ ซองยาว'],['tall','📜 แนวตั้ง'],['square','⬜ จัตุรัส'],['tear','🧾 ฉีกเปิดด้านบน']])}${chk('ผูกโบว์/ริบบิ้นรอบซอง','ui.es.tie')}${iff('ui.es.tie=true',`<div class="colors">${colA('สีริบบิ้น','ui.es.tc','#e53935')}</div>${txt('อีโมจิโบว์','ui.es.tieE')}`)}`)}
     ${grp('สีซอง',`<div class="colors">${col('ตัวซอง','colors.env')}${col('ฝาซอง','colors.flap')}${colA('ด้านในซอง','ui.ev.lin','dark:colors.env:16')}</div>`)}
     ${grp('ลวดลายบนซอง',`<p class="hint">เลือกลายแล้วปรับสี ขนาด และความเข้มได้ ลายจะอยู่ทั้งตัวซองและฝาซอง</p>${pat('ui.ep','mix:colors.env:55')}`)}
     ${grp('ขอบซอง',`${rng('ความหนาขอบ','ui.eb.w',0,12,1,'px')}${sel('ลายเส้นขอบ','ui.eb.st',BSTY)}<div class="colors">${colA('สีขอบ','ui.eb.c','dark:colors.env:35')}</div>${rng('ความมนมุมซอง','ui.eb.r',0,30,1,'px')}${air('ui.air')}`)}
     ${grp('ตราประทับ',`${txt('ตราประทับ (อีโมจิ)','env.seal')}${rng('ขนาดตราประทับ','ui.seal',16,80,1,'px')}<div class="colors">${colA('วงกลมใต้ตราประทับ','ui.ev.sealBg','#ffffff')}</div><p class="hint">ถ้าเป็น "อัตโนมัติ" จะไม่มีวงกลมใต้ตรา</p>`)}
+    ${grp('ตราขีผึ้ง',`${chk('ใช้ตราขีผึ้งแทนตราประทับธรรมดา','ui.wax.on')}${iff('ui.wax.on=true',`${sel('รูปทรง','ui.wax.shape',[['round','⚫ กลม'],['scallop','✴️ ขอบหยัก']])}<div class="colors">${colA('สีขีผึ้ง','ui.wax.c','#b3122d')}</div><p class="hint">อีโมจิจากช่อง "ตราประทับ" จะอยู่บนขีผึ้ง</p>`)}`)}
     ${grp('ข้อความใต้ซอง',`${txt('ข้อความใต้ซอง','env.hint')}${rng('ขนาดข้อความใต้ซอง','ui.hint.s',10,32,1,'px')}<div class="colors">${colA('สีข้อความใต้ซอง','ui.hint.c','colors.hint')}</div>`)}
     ${grp('ลูกเล่น',`${chk('มีเงาใต้ซอง','ui.ev.shadow')}${chk('ซองลอยขยับเบาๆ','ui.ev.bob')}`)}
-    ${rst('env;ui.seal;ui.hint;ui.ev;ui.ep;ui.eb;ui.air')}
+    ${rst('env;ui.seal;ui.hint;ui.ev;ui.ep;ui.eb;ui.air;ui.es;ui.wax')}
+  `)}
+
+  ${sec('✨ แสงและแอนิเมชัน',`
+    ${grp('แสงเรืองรอบ (ขอบวนไฟ)',`${chk('เปิดแสงเรือง','ui.gl.on')}${iff('ui.gl.on=true',`${sel('แสงอยู่ที่','ui.gl.target',[['paper','การ์ดจดหมาย'],['envelope','ซองจดหมาย'],['both','ทั้งสองอย่าง']])}${sel('แบบแสง','ui.gl.mode',[['pulse','💗 หายใจเข้า-ออก'],['blink','✨ กะพริบ'],['rainbow','🌈 วนสีรุ้ง']])}<div class="colors">${colA('สีแสง','ui.gl.c','colors.accent')}</div><p class="hint">แบบรุ้งจะวนสีเองไม่ใช้สีที่เลือก ซองจะหยุดเรืองเมื่อกดเปิดแล้ว</p>${rng('ความเร็ว','ui.gl.speed',1,10,1)}`)}`)}
+    ${grp('พื้นหลังเคลื่อนไหว',`${sel('แบบการเคลื่อนไหว','ui.ba.mode',[['none','ไม่เคลื่อนไหว'],['drift','🌊 ลายพื้นหลังเลื่อนวน'],['gradient','🌈 สีพื้นหลังไล่วน']])}${iff('ui.ba.mode!=none',`${rng('ความเร็ว','ui.ba.speed',1,10,1)}`)}${iff('ui.ba.mode=drift',`<p class="hint">แบบลายเลื่อนต้องเลือกลายที่หมวด 🌅 พื้นหลังหน้าจอก่อน</p>`)}${iff('ui.ba.mode=gradient',`<p class="hint">แบบไล่สีวนใช้ไม่ได้ถ้าตั้งรูปพื้นหลังไว้</p>`)}`)}
+    ${grp('เอฟเฟกต์ตอนเปิดซอง',`${sel('ตอนกดเปิดซองให้มี','ui.fx.open',[['none','ไม่มี'],['flash','⚡ แฟลชสว่าง'],['burst','🎆 อีโมจิพุ่งกระจาย'],['sparkle','🎇 ดอกไม้ไฟ'],['confetti','🎊 กระดาษสีโปรย'],['petals','🌸 กลีบดอกไม้/อีโมจิโปรย']])}${iff('ui.fx.open=petals',txt('อีโมจิที่โปรย (พิมพ์ได้หลายตัว)','ui.fx.emoji'))}`)}
+    ${rst('ui.gl;ui.ba;ui.fx')}
   `)}
 
   ${sec('✍️ การ์ดจดหมาย',`
@@ -760,9 +838,11 @@ function buildUI(){
   `)}
   <p class="hint" style="text-align:center;margin-top:16px"><button class="chip" id="resetBtn">↺ ล้างค่าทั้งหมด</button></p>
   <div class="bar"><button class="btn ghost" id="pvBtn">👀 ดูตัวอย่าง</button><button class="btn" id="shareBtn">🔗 สร้างลิงก์แชร์</button></div>
-  <div class="sheet" id="sheet" hidden><div class="in" id="sheetIn"></div></div>`;
+  <div class="sheet" id="sheet" hidden><div class="in" id="sheetIn"></div></div>
+  <div class="ntf" id="ntf" hidden></div><div id="pvBack" hidden></div>
+  <div class="pvtools" id="pvTools" hidden><button type="button" class="chip on" data-dev="full">📱 เต็มจอ</button><button type="button" class="chip" data-dev="s">มือถือเล็ก</button><button type="button" class="chip" data-dev="m">มือถือ</button><button type="button" class="chip" data-dev="t">แท็บเล็ต</button></div>`;
   $('#jump').innerHTML=[...document.querySelectorAll('#app .card')].map((d,i)=>{d.id='s'+i;return `<button class="chip" data-jump="s${i}">${d.querySelector('summary').textContent.trim()}</button>`}).join('');
-  bindAll();renderPhotos();renderFall();renderAudio();renderYA();renderBG();markTheme();markEff();refreshVis();
+  bindAll();renderPhotos();renderFall();renderAudio();renderYA();renderBG();markTheme();markEff();refreshVis();renderTpls();renderDrafts();
 }
 
 function bindAll(){
@@ -860,6 +940,12 @@ document.addEventListener('click',async e=>{
   const t=e.target;
   const pb=t.closest&&t.closest('[data-pv]');
   if(pb){set(S,pb.parentElement.dataset.pat+'.type',pb.dataset.pv);renderPats();refreshVis();persist()}
+  const tb=t.closest&&t.closest('[data-tpl]');if(tb)applyTemplate(+tb.dataset.tpl);
+  if(t.dataset.dev)setDev(t.dataset.dev);
+  if(t.id==='dSave')saveDraft();
+  if(t.id==='dNew'&&confirm('เริ่มแบบร่างใหม่? สิ่งที่แก้ค้างอยู่จะถูกล้าง (ถ้าอยากเก็บไว้ให้กดบันทึกก่อน)')){S=clone(DEFAULT);refreshAll();persist()}
+  if(t.dataset.dload)loadDraftByName(decodeURIComponent(t.dataset.dload));
+  if(t.dataset.ddel&&confirm('ลบแบบร่างนี้?')){DB.del(decodeURIComponent(t.dataset.ddel)).then(renderDrafts).catch(()=>{})}
   if(t.dataset.theme){const k=t.dataset.theme;S.theme=k;if(THEMES[k])S.colors={...THEMES[k]};bindAll();markTheme();persist()}
   if(t.dataset.del!==undefined){S.photos.splice(+t.dataset.del,1);renderPhotos();persist()}
   if(t.dataset.delfall!==undefined){S.fall.img=null;renderFall();persist()}
@@ -895,13 +981,118 @@ document.addEventListener('change',async e=>{
   }catch(err){alert('อ่านไฟล์ไม่สำเร็จ ลองไฟล์อื่นดูนะ')}
 });
 
+/* =========================================================
+   เทมเพลตสำเร็จรูป / แบบร่างหลายชุด / ตัวอย่างหลายขนาดจอ / แจ้งเตือนตอนเปิดอ่าน
+   ========================================================= */
+const TPL=[
+ {e:'💔',n:'ขอโทษ ง้อแฟน',d:'ปุ่มไม่คืนดีวิ่งหนี กุหลาบร่วง ตราขีผึ้งแดง',theme:'pink',cfg:{fall:{type:'roses',count:34},ui:{fx:{open:'petals',emoji:'🥀 🌹'},wax:{on:true,c:'#b3122d',shape:'scallop'},ep:{type:'hearts',s:16,op:35}}}},
+ {e:'🎂',n:'วันเกิดสุดพิเศษ',d:'ซองผูกโบว์ ลูกโป่งลอย กระดาษสีโปรย ขอบรุ้งเรือง',theme:'sunset',cfg:{text:{title:'สุขสันต์วันเกิด 🎂',body:'ขอให้ปีนี้เป็นปีที่ดีที่สุดของเธอ\nมีความสุข สุขภาพแข็งแรง\nและสมหวังทุกอย่างเลยนะ 🎉',sign:'จากคนที่รักเธอ 💝'},splash:{text:'มีของขวัญวันเกิดส่งถึงเธอ 🎁',btn:'แตะเพื่อเปิด'},env:{seal:'🎂',hint:'แตะที่ซองเพื่อเปิดของขวัญ 🎁'},fall:{type:'custom',emoji:'🎈 🎉 🎊 ✨',count:35,speed:3,size:30},btn:{mode:'one',yes:'ขอบคุณนะ 🥳',yesResult:'สุขสันต์วันเกิด 🎂',yesSub:'ขอให้มีความสุขมากๆ',after:{big:'🎂',effects:['confetti','burst','fireworks'],burstEmoji:'🎈 🎉 🎊 🎂 ✨',sound:'tada'}},ui:{es:{shape:'classic',tie:true,tc:'#ff4d6d',tieE:'🎀'},ep:{type:'stars',c:'#ffffff',s:16,op:55},fx:{open:'confetti'},gl:{on:true,target:'paper',mode:'rainbow',speed:4},pp:{type:'dots',s:20,op:14}}}},
+ {e:'💘',n:'วาเลนไทน์',d:'ขอบไปรษณีย์อากาศ ตราขีผึ้งแดง กลีบกุหลาบโปรย แสงเรือง',theme:'pink',cfg:{colors:{bg1:'#ffd1dc',bg2:'#ff8fab',env:'#e63956',flap:'#c92a47',paper:'#fffafb',text:'#7a1230',accent:'#d6204a',hint:'#7a1230'},text:{title:'Happy Valentine 💘',body:'มีเธออยู่ในทุกวัน\nก็เหมือนวันวาเลนไทน์ทุกวันเลย\nรักเธอนะ 💕',sign:'จากหัวใจดวงนี้ 💗'},env:{seal:'💘',hint:'แตะเพื่อเปิดจดหมายรัก 💌'},fall:{type:'hearts',count:45,speed:3},btn:{mode:'one',yes:'รักเหมือนกัน 💕',yesResult:'รักที่สุดเลย 💖',yesSub:'Happy Valentine!'},ui:{ep:{type:'hearts',c:'#ffffff',s:14,op:40},air:{on:true},wax:{on:true,c:'#a50f2d',shape:'scallop'},fx:{open:'petals',emoji:'🌹 💗 💕'},gl:{on:true,target:'both',mode:'pulse',c:'#ff4d6d',speed:4}}}},
+ {e:'🌙',n:'ราตรีโรแมนติก',d:'ธีมกลางคืน ดาวร่วง พื้นหลังไล่สีวน ตราขีผึ้งทอง',theme:'night',cfg:{text:{title:'ถึงคนที่คิดถึงทุกคืน 🌙',body:'ดาวทุกดวงบนฟ้าคืนนี้\nก็ยังสวยไม่เท่าเธอเลย\nฝันดีนะ ✨',sign:'จากคนที่มองดาวดวงเดียวกัน'},env:{seal:'🌙',hint:'แตะเพื่อเปิดจดหมายราตรี ✨'},fall:{type:'stars',count:50,speed:2,size:22},btn:{mode:'one',yes:'คิดถึงเหมือนกัน 🌙',yesResult:'ฝันดีนะ 💤',yesSub:'ดาวกำลังเฝ้าเธออยู่'},ui:{ep:{type:'stars',c:'#ffffff',s:14,op:30},wax:{on:true,c:'#c9a227',shape:'round'},gl:{on:true,target:'both',mode:'pulse',c:'#ffd54f',speed:3},ba:{mode:'gradient',speed:3},bp:{type:'dots',c:'#ffffff',s:30,op:18},fx:{open:'sparkle'}}}},
+ {e:'🌸',n:'ซากุระญี่ปุ่น',d:'ซองแนวตั้งผูกโบว์ ซากุระร่วง ลายดอกไม้เลื่อนเบาๆ',theme:'lavender',cfg:{colors:{bg1:'#fff0f6',bg2:'#ffc2dc',env:'#ffb3d1',flap:'#ff94bd',paper:'#fffafc',text:'#7a2f55',accent:'#e0508f',hint:'#7a2f55'},text:{title:'ถึงเธอ 🌸',body:'ดอกซากุระบานทีไร\nก็นึกถึงเธอทุกที\nขอให้เรามีฤดูใบไม้ผลิด้วยกันอีกนานๆ นะ',sign:'จากคนที่รักเธอ'},env:{seal:'🌸',hint:'แตะเพื่อเปิดจดหมาย 🌸'},fall:{type:'sakura',count:45,speed:3,size:28},btn:{mode:'one',yes:'ขอบคุณนะ 🌸',yesResult:'น่ารักที่สุด 🌸',yesSub:'ขอบคุณที่อยู่ด้วยกัน'},ui:{es:{shape:'tall',tie:true,tc:'#e0508f',tieE:'🎀'},ep:{type:'flowers',c:'#ffffff',s:14,op:50},bp:{type:'flowers',c:'#ffffff',s:28,op:30},ba:{mode:'drift',speed:3},fx:{open:'petals',emoji:'🌸 💮 🌺'}}}},
+ {e:'💜',n:'สารภาพรัก',d:'ซองยาว ปุ่มปฏิเสธหดเล็กลง ตราขีผึ้งม่วง',theme:'lavender',cfg:{text:{title:'มีอะไรจะบอก 💜',body:'ที่ผ่านมาเรามีเธออยู่ข้างๆ\nมันมีความสุขมากเลย\nเป็นแฟนกับเรานะ ได้ไหม 🥹',sign:'จากคนที่แอบชอบเธอ'},env:{seal:'💜',hint:'แตะเพื่อเปิดอ่านนะ 💌'},btn:{mode:'two',yes:'ได้สิ 💜',no:'ขอคิดดูก่อน 🤔',noMode:'shrink',cycle:'รอเธอตอบอยู่นะ 🥺,ลองคิดดูอีกที,เรารอได้เสมอ',yesResult:'เย้! เป็นแฟนกันแล้ว 🎉',yesSub:'ขอบคุณที่เลือกเรานะ'},fall:{type:'hearts',count:30},ui:{es:{shape:'wide'},wax:{on:true,c:'#6a3fb5',shape:'scallop'},ep:{type:'diamond',c:'#ffffff',s:16,op:30},gl:{on:true,target:'paper',mode:'pulse',c:'#a78bfa',speed:4},fx:{open:'sparkle'}}}},
+ {e:'🎄',n:'ปีใหม่ / คริสต์มาส',d:'โทนเขียวแดง หิมะตก ขอบริ้วเขียว-แดง ตราขีผึ้งทอง',theme:'mint',cfg:{colors:{bg1:'#e8f5e9',bg2:'#8fd19e',env:'#d32f2f',flap:'#b71c1c',paper:'#fffdf7',text:'#1b5e20',accent:'#c62828',hint:'#1b5e20'},text:{title:'สุขสันต์วันปีใหม่ 🎄',body:'ขอให้ปีใหม่นี้\nเต็มไปด้วยความสุข สุขภาพดี\nและมีเรื่องดีๆ เข้ามาทุกวัน',sign:'ด้วยรักและคิดถึง'},env:{seal:'🎄',hint:'แตะเพื่อเปิดการ์ดอวยพร 🎁'},fall:{type:'snow',count:60,speed:3},btn:{mode:'one',yes:'สุขสันต์เช่นกัน 🎉',yesResult:'Happy New Year! 🎆',yesSub:'ขอให้มีความสุขตลอดปี'},ui:{air:{on:true,c1:'#c62828',c2:'#2e7d32'},ep:{type:'check',c:'#ffffff',s:24,op:25},wax:{on:true,c:'#c9a227',shape:'round'},fx:{open:'confetti'}}}},
+ {e:'🙏',n:'ขอบคุณ',d:'ซองคราฟต์ฉีกเปิด กระดาษมีเส้นบรรทัด ฟอนต์มีหัว',theme:'kraft',cfg:{font:"'Pridi',serif",text:{title:'ขอบคุณนะ',body:'ขอบคุณสำหรับทุกอย่างที่ผ่านมา\nสำหรับความช่วยเหลือและกำลังใจเสมอ\nมันมีความหมายกับเรามากจริงๆ',sign:'ด้วยความขอบคุณ'},env:{seal:'🙏',hint:'แตะเพื่อฉีกซองอ่าน 💌'},fall:{type:'none'},btn:{mode:'one',yes:'ยินดีเสมอ 🤝',yesResult:'ขอบคุณอีกครั้งนะ 🙏',yesSub:'ขอให้มีแต่เรื่องดีๆ'},ui:{es:{shape:'tear'},pp:{type:'lines',c:'#8d6e63',s:28,op:25},po:{w:2,st:'dashed'},ep:{type:'stripes',c:'#ffffff',s:18,op:15}}}}
+];
+function tplColors(t){const b=THEMES[t.theme]?{...THEMES[t.theme]}:{...THEMES.pink};return Object.assign(b,(t.cfg&&t.cfg.colors)||{})}
+function renderTpls(){
+  const box=$('#tpls');if(!box)return;
+  box.innerHTML=TPL.map((t,i)=>{const C=tplColors(t);return `<button type="button" class="tpl" data-tpl="${i}"><b>${t.e}</b><span>${t.n}</span><small>${t.d}</small><div class="sw">${[C.bg2,C.env,C.flap,C.accent].map(x=>`<u style="background:${x}"></u>`).join('')}</div></button>`}).join('');
+}
+function refreshAll(){bindAll();renderPhotos();renderFall();renderAudio();renderYA();renderBG();markTheme();markEff();refreshVis()}
+function applyTemplate(i){
+  const t=TPL[i];if(!t)return;
+  if(!confirm('ใช้เทมเพลต "'+t.n+'"?\nการตั้งค่าที่ทำไว้จะถูกแทนที่ (รูปและเสียงที่เพิ่มไว้จะยังอยู่)'))return;
+  const keep={photos:S.photos,audio:S.audio,bg:S.adv.bgImg,fimg:S.fall.img,ya:S.btn.after.ya};
+  const n=clone(DEFAULT);if(THEMES[t.theme])n.colors={...THEMES[t.theme]};
+  merge(n,clone(t.cfg||{}));n.theme=(t.cfg&&t.cfg.colors)?'custom':(t.theme||'custom');
+  n.photos=keep.photos;n.audio=keep.audio;n.adv.bgImg=keep.bg;n.fall.img=keep.fimg;n.btn.after.ya=keep.ya;
+  S=n;refreshAll();persist();showBanner('ใช้เทมเพลต "'+t.n+'" แล้ว กด 👀 ดูตัวอย่างได้เลย');
+}
+
+/* ---------- แบบร่างหลายชุด (IndexedDB) ---------- */
+const DB={
+  open(){return new Promise((res,rej)=>{const r=indexedDB.open('llStudio',1);r.onupgradeneeded=()=>r.result.createObjectStore('drafts',{keyPath:'name'});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})},
+  async tx(mode,fn){const d=await DB.open();return new Promise((res,rej)=>{const t=d.transaction('drafts',mode),rq=fn(t.objectStore('drafts'));t.oncomplete=()=>{d.close();res(rq&&rq.result)};t.onerror=()=>rej(t.error)})},
+  put(o){return DB.tx('readwrite',s=>s.put(o))},all(){return DB.tx('readonly',s=>s.getAll())},del(n){return DB.tx('readwrite',s=>s.delete(n))}
+};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function renderDrafts(){
+  const box=$('#draftList');if(!box)return;
+  try{
+    const list=(await DB.all()||[]).sort((a,b)=>b.t-a.t);
+    box.innerHTML=list.length?list.map(d=>`<div class="dit"><div><b>${esc(d.name)}</b><small>${new Date(d.t).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'})} · ${(JSON.stringify(d.cfg).length/1048576).toFixed(1)} MB</small></div><button type="button" class="btn ghost sm" data-dload="${encodeURIComponent(d.name)}">เปิด</button><button type="button" class="btn ghost sm" data-ddel="${encodeURIComponent(d.name)}">🗑️</button></div>`).join(''):'<p class="hint">ยังไม่มีแบบร่างที่บันทึกไว้</p>';
+  }catch(e){box.innerHTML='<p class="hint">เบราว์เซอร์นี้เก็บแบบร่างไม่ได้ (อาจอยู่ในโหมดส่วนตัว)</p>'}
+}
+async function saveDraft(){
+  const inp=$('#dName');let name=(inp.value||'').trim()||('แบบร่าง '+new Date().toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'}));
+  try{
+    const ex=(await DB.all()||[]).some(d=>d.name===name);
+    if(ex&&!confirm('มีแบบร่างชื่อ "'+name+'" อยู่แล้ว เขียนทับไหม?'))return;
+    await DB.put({name,t:Date.now(),cfg:clone(S)});inp.value='';await renderDrafts();showBanner('บันทึกแบบร่าง "'+name+'" แล้ว');
+  }catch(e){alert('บันทึกแบบร่างไม่สำเร็จ')}
+}
+async function loadDraftByName(name){
+  try{
+    const d=(await DB.all()||[]).find(x=>x.name===name);if(!d)return;
+    if(!confirm('เปิดแบบร่าง "'+name+'"? สิ่งที่แก้ค้างอยู่ตอนนี้จะถูกแทนที่ (ถ้าอยากเก็บไว้ให้กดบันทึกก่อน)'))return;
+    S=merge(clone(DEFAULT),clone(d.cfg));refreshAll();persist();showBanner('เปิดแบบร่าง "'+name+'" แล้ว');
+  }catch(e){alert('เปิดแบบร่างไม่สำเร็จ')}
+}
+
+/* ---------- ตัวอย่างหลายขนาดจอ ---------- */
+const DEV={full:null,s:[320,568],m:[390,844],t:[768,1024]};
+let curDev='full';
+const DEVP=['inset','left','top','width','height','transform','borderRadius','boxShadow'];
+function setDev(k){
+  curDev=k;const r=$('#viewerRoot'),d=DEV[k];
+  document.querySelectorAll('[data-dev]').forEach(b=>b.classList.toggle('on',b.dataset.dev===k));
+  DEVP.forEach(p=>r.style[p]='');
+  $('#pvBack').hidden=!d;
+  if(d){
+    const sc=Math.min(1,(innerWidth-24)/d[0],(innerHeight-86)/d[1]);
+    Object.assign(r.style,{inset:'auto',left:'50%',top:'calc(50% - 30px)',width:d[0]+'px',height:d[1]+'px',transform:`translate(-50%,-50%) scale(${sc})`,borderRadius:'28px',boxShadow:'0 0 0 10px #1c1224,0 30px 80px rgba(0,0,0,.6)'});
+  }
+  dispatchEvent(new Event('resize'));
+}
+
+/* ---------- แจ้งเตือนเมื่อมีคนเปิดอ่าน ---------- */
+let watchT=null,watchSeen=null,bannerT=null;
+const EVN={load:'👀 เปิดลิงก์แล้ว',start:'👆 แตะปุ่มเริ่มแล้ว',open:'💌 เปิดซองแล้ว',yes:'💖 กดปุ่มตอบรับแล้ว!',no:'😤 กดปุ่มปฏิเสธ'};
+function showBanner(msg){
+  const b=$('#ntf');if(!b)return;b.textContent=msg;b.hidden=false;clearTimeout(bannerT);bannerT=setTimeout(()=>{b.hidden=true},5000);
+}
+function notify(msg){
+  showBanner(msg);try{navigator.vibrate&&navigator.vibrate([120,60,120])}catch(e){}
+  try{if('Notification' in window&&Notification.permission==='granted')new Notification('Love Letter Studio',{body:msg})}catch(e){}
+}
+function seenHtml(sn){
+  sn=sn||{};const rows=Object.keys(EVN).filter(k=>sn[k]).sort((a,b)=>sn[a]-sn[b]).map(k=>`${EVN[k]} · ${new Date(sn[k]*1000).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}${(sn[k+'_n']||0)>1?' (×'+sn[k+'_n']+')':''}`);
+  return rows.length?rows.join('<br>'):'⏳ ยังไม่มีใครเปิดลิงก์';
+}
+function stopWatch(){clearInterval(watchT);watchT=null}
+function startWatch(id){
+  stopWatch();watchSeen=null;
+  const poll=async()=>{
+    try{
+      const st=await (await fetch('/api/status',{headers:{'X-Owner':ownerId()}})).json();
+      if(!st.active||st.id!==id){stopWatch();return}
+      const sn=st.seen||{};
+      if(watchSeen!==null)for(const k in EVN){const n=sn[k+'_n']||0,o=watchSeen[k+'_n']||0;if(n>o&&(k!=='no'||o===0))notify(EVN[k])}
+      watchSeen=sn;const b=$('#seenBox');if(b)b.innerHTML=seenHtml(sn);
+    }catch(e){}
+  };
+  poll();watchT=setInterval(poll,4000);
+}
+
 /* ---------- ตัวอย่าง ---------- */
 let pvDestroy=null;
 function openPreview(){
   const r=$('#viewerRoot');r.hidden=false;document.body.style.overflow='hidden';
   pvDestroy=mountViewer(r,S,{onClose:closePreview});
+  $('#pvTools').hidden=false;setDev(curDev);
 }
-function closePreview(){if(pvDestroy)pvDestroy();pvDestroy=null;$('#viewerRoot').hidden=true;document.body.style.overflow=''}
+function closePreview(){if(pvDestroy)pvDestroy();pvDestroy=null;const r=$('#viewerRoot');r.hidden=true;DEVP.forEach(p=>r.style[p]='');$('#pvTools').hidden=true;$('#pvBack').hidden=true;document.body.style.overflow=''}
 
 /* ---------- สร้างลิงก์แชร์ (ใช้ได้ 20 นาที / สร้างได้ทีละ 1 ลิงก์) ---------- */
 function ownerId(){
@@ -912,7 +1103,7 @@ function ownerId(){
 let linkTimer=null;
 const fmtT=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 function endView(title,msg){
-  clearInterval(linkTimer);
+  clearInterval(linkTimer);stopWatch();
   const box=$('#sheetIn');
   box.innerHTML=`<h3>${title}</h3><p class="hint">${msg}</p><div class="row"><button class="btn" id="newLnk">สร้างลิงก์ใหม่</button><button class="btn ghost" id="clLnk">ปิด</button></div>`;
   $('#newLnk').onclick=createLink;$('#clLnk').onclick=()=>{$('#sheet').hidden=true};
@@ -933,14 +1124,20 @@ function showLink(id,remaining,note){
       ${note?`<p class="hint" style="color:#c2185b">${note}</p>`:''}
       <div class="link" id="lnk">${url}</div>
       <div style="text-align:center;font-size:15px;color:#7d4a73">⏳ ลิงก์จะหมดอายุใน <b id="tm" style="color:#c2185b;font-size:22px;font-variant-numeric:tabular-nums">--:--</b></div>
+      <div class="seen" id="seenBox"></div>
       <div class="row"><button class="btn" id="cpBtn">คัดลอกลิงก์</button><button class="btn ghost" id="shBtn">แชร์</button><a class="btn ghost" href="${url}" target="_blank" style="text-decoration:none">เปิดดู</a></div>
-      <div class="row"><button class="btn ghost" id="delBtn" style="color:#c62828;border-color:#f3b4b4">🗑️ ลบลิงก์</button><button class="btn ghost" id="clLnk">ปิด</button></div>
+      <div class="row"><button class="btn ghost" id="delBtn" style="color:#c62828;border-color:#f3b4b4">🗑️ ลบลิงก์</button><button class="btn ghost" id="ntfBtn">🔔 แจ้งเตือน</button><button class="btn ghost" id="clLnk">ปิด</button></div>
       <label class="f"><span>ฐานลิงก์ (ใช้เมื่อมี tunnel/โดเมนอื่น)</span><input type="text" id="baseIn" value="${base}"></label>
       <p class="hint">ลิงก์ใช้ได้ 20 นาทีแล้วจะถูกลบอัตโนมัติ และสร้างได้ทีละ 1 ลิงก์ ถ้าจะสร้างใหม่ต้องรอหมดเวลาหรือกดลบก่อน</p>`;
     $('#baseIn').onchange=e=>{base=e.target.value.trim()||location.origin;localStorage.setItem('llBase',base);draw()};
     $('#cpBtn').onclick=async()=>{try{await navigator.clipboard.writeText(url);$('#cpBtn').textContent='คัดลอกแล้ว ✓'}catch(_){prompt('คัดลอกลิงก์นี้',url)}};
     $('#shBtn').onclick=()=>{navigator.share?navigator.share({title:'มีจดหมายถึงเธอ 💌',url}).catch(()=>{}):prompt('คัดลอกลิงก์นี้',url)};
     $('#clLnk').onclick=()=>{sheet.hidden=true};
+    $('#ntfBtn').onclick=async()=>{
+      if(!('Notification' in window)){showBanner('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือน แต่จะมีแถบแจ้งเตือนขึ้นบนหน้านี้เมื่อมีคนเปิด');return}
+      try{const p=await Notification.requestPermission();showBanner(p==='granted'?'เปิดการแจ้งเตือนแล้ว 🔔':'ไม่ได้อนุญาตการแจ้งเตือน (ยังมีแถบแจ้งเตือนบนหน้านี้)')}catch(e){}
+    };
+    {const sb=$('#seenBox');if(sb)sb.innerHTML=seenHtml(watchSeen)}
     $('#delBtn').onclick=async()=>{
       if(!confirm('ลบลิงก์นี้เลยไหม? คนที่มีลิงก์จะเปิดไม่ได้อีก'))return;
       try{
@@ -951,7 +1148,7 @@ function showLink(id,remaining,note){
     };
     tick();
   };
-  draw();
+  draw();startWatch(id);
   linkTimer=setInterval(tick,1000);
 }
 async function createLink(){
@@ -984,7 +1181,7 @@ async function createLink(){
     $('#app').hidden=true;const r=$('#viewerRoot');r.hidden=false;
     fetch('/api/letter/'+m[1]).then(x=>{if(!x.ok)throw 0;return x.json()}).then(cfg=>mountViewer(r,cfg))
       .catch(()=>{r.style.background='#fdeef3';r.innerHTML='<div style="display:grid;place-items:center;height:100%;text-align:center;font-family:Kanit,sans-serif;color:#7a2848;padding:24px"><div><div style="font-size:60px">💔</div><p>ไม่พบจดหมายฉบับนี้<br>ลิงก์อาจหมดอายุ (ใช้ได้ 20 นาที) หรือถูกลบแล้ว</p></div></div>'});
-  }else{loadDraft();buildUI()}
+  }else{loadDraft();buildUI();try{fetch('/api/status',{headers:{'X-Owner':ownerId()}}).then(r=>r.json()).then(st=>{if(st.active)startWatch(st.id)}).catch(()=>{})}catch(e){}}
 })();
 </script>
 </body>

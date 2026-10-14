@@ -13,6 +13,7 @@ ID_RE = re.compile(r"^[a-z0-9]{6,12}$")
 ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789"
 TTL = 20 * 60                      # ลิงก์ใช้ได้ 20 นาที
 OWNER_RE = re.compile(r"^[A-Za-z0-9]{16,64}$")
+EVENTS = ("load", "start", "open", "yes", "no")   # เหตุการณ์ที่ผู้รับทำ (ใช้แจ้งเตือนเจ้าของลิงก์)
 LOCK = threading.Lock()
 
 
@@ -93,7 +94,8 @@ class Handler(BaseHTTPRequestHandler):
                 if a:
                     lid, m = a
                     return self._send(200, json.dumps(
-                        {"active": True, "id": lid, "remaining": max(1, int(m["exp"] - time.time()))}))
+                        {"active": True, "id": lid, "remaining": max(1, int(m["exp"] - time.time())),
+                         "seen": m.get("seen", {})}))
             return self._send(200, '{"active":false}')
         if path.startswith("/api/letter/"):
             lid = path.rsplit("/", 1)[-1]
@@ -105,6 +107,26 @@ class Handler(BaseHTTPRequestHandler):
         self._send(404, '{"error":"not found"}')
 
     def do_POST(self):
+        if self.path.startswith("/api/seen/"):          # ผู้รับแจ้งว่าเปิด/กดอะไร (ไม่ต้องมีรหัสเจ้าของ)
+            lid = self.path.rsplit("/", 1)[-1]
+            ev = ""
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+                if 0 < n < 2048:
+                    ev = str(json.loads(self.rfile.read(n)).get("ev", ""))
+            except Exception:
+                pass
+            if ID_RE.match(lid) and ev in EVENTS:
+                with LOCK:
+                    m = alive(lid)
+                    if m:
+                        sn = m.setdefault("seen", {})
+                        now = time.time()
+                        sn.setdefault(ev, now)
+                        sn[ev + "_n"] = sn.get(ev + "_n", 0) + 1
+                        with open(meta_path(lid), "w", encoding="utf-8") as f:
+                            json.dump(m, f)
+            return self._send(200, '{"ok":true}')
         owner = self.headers.get("X-Owner", "")
         if not OWNER_RE.match(owner):
             return self._send(400, '{"error":"ไม่พบรหัสผู้ใช้ ลองรีเฟรชหน้าเว็บ"}')
